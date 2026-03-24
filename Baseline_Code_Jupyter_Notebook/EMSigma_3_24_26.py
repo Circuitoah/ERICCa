@@ -23,24 +23,36 @@ Edit: March 13th, 2026  - Removed Gamma(b) and profile_funct_param as well as pa
 Edit:March 20th, 2026.  - Removed Funcitons A_return, A_min, sat_min, rho_param_finder, C(E)
                         - Removed variables A, and sigma R
 
-Edit: March 23rd, 2026. - Found a bug in chi_no_dens. The input file was  chi_no_dens(b , rho, Gammap) instead of  chi_no_dens(b , rho, Gamma). This apear during 5_14_25 update when Gamma was added as an input. This therefore post-dates the benchmarked that  chi_no_dens was used in. 
+Edit: March 23rd, 2026. - Found a bug in chi_no_dens. The input file was  chi_no_dens(b , rho, Gammap) instead of  chi_no_dens(b , rho, Gamma). This apear during 5_14_25 update when Gamma was added as an input. 
+                        This bug therefore post-dates the benchmarked that  chi_no_dens was used in. 
 
 Edit: March 24th, 2026. - Turn everything into one class, to remove global variables
                         - removed rm_rms
                         - removed all of the roots variables from the initialization
                         - commented out all of the global variables used for meshes
                         - removed whitespaces to make code more readable
+                        - removed scipy.optimize, scipy, and interp1d
 """
 import numpy as np
 from numpy.polynomial import legendre
-from scipy.interpolate import Rbf, CubicSpline, interp1d
-from scipy.optimize import curve_fit, minimize
-import scipy as sp
-
+from scipy.interpolate import Rbf, CubicSpline
 
 class Eikonal_Model:
 
     def __init__(self):
+        """
+        Class parameters
+        rmax : (float), max values for r mesh [fm]
+        bmax : (float), max values for b mesh [fm]
+        zmax : (float), max and min values for z mesh [fm]
+        st_max : (float),  max values for s and t mesh [fm]
+
+        numpoints : (int),  number of points for the s and t mesh
+        numpoints_theta : (int), number of points for the theta_s and theta_t mesh
+        r_numpoints : (int), number of points for the r mesh
+        b_numpoints : (int), number of points for the b mesh
+        z_numpoints : (int), number of points for the z mesh
+        """
        #max values for our mesh
         self.rmax = 25
         self.bmax = 20
@@ -48,12 +60,13 @@ class Eikonal_Model:
         self.st_max = 15
 
         #Number of points for the mesh
-        self.numpoints = 30 # What numpoints does this go to?
+        self.numpoints = 30 
         self.numpoints_theta = 30
         self.r_numpoints = 20
         self.b_numpoints = 35
         self.z_numpoints =20
-
+        
+        #Defining bounds of integrations
         ra, rb = 0, self.rmax #fm 
         ba, bb = 0, self.bmax #fm   
         za, zb = -self.zmax, self.zmax#fm 
@@ -61,8 +74,7 @@ class Eikonal_Model:
         s_theta_a, s_theta_b = 0, 2*np.pi 
         ta, tb =0, self.st_max #fm
         t_theta_a , t_theta_b = 0, 2 * np.pi
-
-        #Defining bounds of integrations
+        
         def mesh_creator(xa = 0, xb = 10 ,x_numpoints = 20):
 
             x_roots, x_weights = legendre.leggauss(x_numpoints)
@@ -226,7 +238,7 @@ class Eikonal_Model:
     def Chi_mol_1(self, b, rho_t, rho_p, Gamma):
 
         """
-        Calculates the (half?) eikonal phase in the MOL model.
+        Calculates the half of the eikonal phase in the MOL model.
     
         Input parameters
         b     : (float), Impact parameter [fm]
