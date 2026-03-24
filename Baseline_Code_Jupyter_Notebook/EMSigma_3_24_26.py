@@ -26,18 +26,28 @@ Edit:March 20th, 2026.  - Removed Funcitons A_return, A_min, sat_min, rho_param_
 Edit: March 23rd, 2026. - Found a bug in chi_no_dens. The input file was  chi_no_dens(b , rho, Gammap) instead of  chi_no_dens(b , rho, Gamma). This apear during 5_14_25 update when Gamma was added as an input. 
                         This bug therefore post-dates the benchmarked that  chi_no_dens was used in. 
 
-Edit: March 24th, 2026. - Turn everything into one class, to remove global variables
-                        - removed rm_rms
+Edit: March 24th, 2026. - removed rm_rms
                         - removed all of the roots variables from the initialization
                         - commented out all of the global variables used for meshes
                         - removed whitespaces to make code more readable
                         - removed scipy.optimize, scipy, and interp1d
+                        - removed rhoz_p
+                        - Created 3 classes, cross_sections, densities ,profile_function
 """
 import numpy as np
 from numpy.polynomial import legendre
 from scipy.interpolate import Rbf, CubicSpline
 
-class Eikonal_Model:
+def mesh_creator(xa = 0, xb = 10 ,x_numpoints = 20):
+
+    x_roots, x_weights = legendre.leggauss(x_numpoints)
+    x_weights = x_weights* 0.5 * (xb - xa)
+    # Map the roots from [-1, 1] to the interval [a, b]
+    x_mapped_roots = 0.5 * (x_roots + 1) * (xb - xa) + xa
+
+    return x_weights, x_mapped_roots
+
+class cross_section:
 
     def __init__(self):
         """
@@ -75,15 +85,6 @@ class Eikonal_Model:
         ta, tb =0, self.st_max #fm
         t_theta_a , t_theta_b = 0, 2 * np.pi
         
-        def mesh_creator(xa = 0, xb = 10 ,x_numpoints = 20):
-
-            x_roots, x_weights = legendre.leggauss(x_numpoints)
-            x_weights = x_weights* 0.5 * (xb - xa)
-            # Map the roots from [-1, 1] to the interval [a, b]
-            x_mapped_roots = 0.5 * (x_roots + 1) * (xb - xa) + xa
-
-            return x_weights, x_mapped_roots
-
         # Defining legendre mesh
         self.r_weights, self.r_mapped_roots = mesh_creator(xa =ra, xb =rb ,x_numpoints = self.r_numpoints)
         self.b_weights, self.b_mapped_roots = mesh_creator(xa =ba, xb =bb ,x_numpoints = self.b_numpoints)
@@ -103,135 +104,6 @@ class Eikonal_Model:
         arg_y =  a * np.sin(theta_a) + b * np.sin(theta_b) - c * np.sin(theta_c)
 
         return np.sqrt(arg_x**2 + arg_y**2)
-
-#__functions_____________________________________________________________________________________________________________________________
-
-
-    def rho_m( self, r, C_m_p = 0, a_m_p = 0, rho_0_p = 0):
-        """
-        Calculates the density of a two point fermi funciton at r radius
-    
-        Input paramters
-            r       : (float), radius in spherical coordinates [fm]
-            #C_m_p  : (float), half-density radius
-            #a_m_p  : (float), diffuseness [fm]
-            rho_0_p : (float), the saturation density [fm^-3]"""
-        return rho_0_p /(1 + np.exp((r - C_m_p)/a_m_p))
-
-
-    class Profile_Function:
-        """
-        Interpolates profile function paramters for a certain reaction energy and plugs parameters into Gamma(b). Results are only relayable between  E= 40 - 1000 MeV.
-         
-        Input paramters: 
-        interaction_type: (string), Type of reaction [ "general", "np", "matter"] 
-        E      : (float),  Energy of reaction [MeV]
-
-        Built in general form of the profile function -> Gamma(b)
-    
-        Class parameters
-        b: float, but could also be an array
-        alpha  : (float), the NN scattering amplitude [ ]
-        beta   : (float), the finite range parameter [fm^2]
-        sigma_n:(float), the nucleon nucleon cross section [fm^2]
-        """ 
-
-        def __init__(self, Model_type = "general", E = 1):
-            self.alpha = 1
-            self.beta = 1
-            self.sigma_n = 1
-        
-            self.Gamma = lambda b: (1 - 1j * self.alpha) / (4 * np.pi * self.beta) * self.sigma_n * np.exp(-b**2 / (2 * self.beta))
-        
-            if (Model_type == "np"):
-    
-                profile_funct_table = np.genfromtxt("new_profile_funct_params.txt", unpack = True, skip_header= 2)
-    
-
-                sigma_pp_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
-                alphapp_fun = CubicSpline(profile_funct_table[0],profile_funct_table[2])
-                betapp_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[3])
-
-                sigma_pn_fun = CubicSpline(profile_funct_table[0],profile_funct_table[4])
-                alphapn_fun = CubicSpline(profile_funct_table[0],profile_funct_table[5])
-                betapn_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[6])
-
-                sigma_pp = sigma_pp_fun(E)
-                alphapp = alphapp_fun(E)
-                betapp  = betapp_fun(E)
-
-                sigma_pn = sigma_pn_fun(E)
-                alphapn = alphapn_fun(E)
-                betapn  = betapn_fun(E) 
-        
-                self.Gamma = lambda b :(1 -  1j * alphapn)/( 4 * np.pi * betapn)*sigma_pn * np.exp( - b**2/(2 *betapn) ) + (1 -  1j * alphapp)/( 4 * np.pi * betapp) * sigma_pp * np.exp( - b**2/(2 *betapp) )
-
-            if (Model_type == "matter"):
-    
-                profile_funct_table = np.genfromtxt("profile_funct_param_matter.txt", unpack = True, skip_header= 2)
-
-                sigma_NN_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
-                alpha_fun = CubicSpline(profile_funct_table[0],profile_funct_table[2])
-                beta_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[3])
-
-                self.sigma_n = sigma_NN_fun(E)
-                self.alpha = alpha_fun(E)
-                self.beta  = beta_fun(E)
-    
-
-    def dens_b_interpolator(self, array_r, array_rho):
-        """
-        Takes a spherecial densties and maps/interpolates spherical mesh onto mesh used 
-        in the phase shift calculation. Can be used for matter and proton and neutron 
-        densties.
-    
-        Input parameters
-            array_r   : list or np.array, radius r mesh in spherical coordinates [fm]
-            array_rho : list or np.array, density mesh [?] 
-
-            . array_r and array_rho needs to be the same size
-
-            . Requires z mesh
-        """
-    
-        def rho_funct(r):
-            if r <= (array_r[-1]) :  
-                den_rho_f = Rbf(array_r, array_rho)
-                return den_rho_f(r)
-    
-            else:
-                return 0
-    
-        def rho_z_funct(b):
-            integrand = lambda z: rho_funct(np.sqrt(b**2 + z**2))
-            funct_values = np.array([integrand(i) for i in  self.z_mapped_roots.tolist()])
-            results_b = np.sum(self.z_weights * funct_values)
-            return results_b 
-
-        results_z = np.array( [rho_z_funct(i) for i in self.t_mapped_roots.tolist()])
-        return results_z
-
-
-#_____________________________________________________________________________________________________________________________________
-
-    def rhoz_p(self, b):
-        """
-        Calculates the density of a two point fermi funciton as a function of impact parameter b at point b
-    
-        Input parameters
-        b: (float), impact parameter [fm]
-        """
-        #global za, zb, z_numpoints, z_roots, z_weights, z_mapped_roots
-
-        integrand = lambda z : self.rho_m( np.sqrt(z**2 + b**2 ))
-    
-        func_values = integrand(self.z_mapped_roots)
-    
-         # Perform Gaussian Legendre integration
-        result = np.sum(self.z_weights * func_values) 
-
-        return result
-
 
 # Functions that require integrals____________________________________________________________________________________________________
 
@@ -282,8 +154,6 @@ class Eikonal_Model:
         result = np.sum(self.s_theta_weights * func_values, axis = 0)  
     
         return result
-
-
 
     def Chi_mol(self,b, rho_t, rho_p, Gamma):
         """
@@ -483,3 +353,121 @@ class Eikonal_Model:
         result = np.sum(self.b_weights * func_values) 
 
         return result * 10
+    
+
+#__functions_____________________________________________________________________________________________________________________________
+
+class densities:
+    def __init__(self):
+       #max values for our mesh
+        self.zmax = 5
+        self.z_numpoints =20
+        za, zb = -self.zmax, self.zmax#fm 
+        self.z_weights, self.z_mapped_roots = mesh_creator(xa =za, xb =zb ,x_numpoints = self.z_numpoints)
+    
+    def rho_m( self, r, C_m_p = 0, a_m_p = 0, rho_0_p = 0):
+        """
+        Calculates the density of a two point fermi funciton at r radius
+    
+        Input paramters
+            r       : (float), radius in spherical coordinates [fm]
+            #C_m_p  : (float), half-density radius
+            #a_m_p  : (float), diffuseness [fm]
+            rho_0_p : (float), the saturation density [fm^-3]"""
+        return rho_0_p /(1 + np.exp((r - C_m_p)/a_m_p))
+    
+
+    def dens_b_interpolator(self, array_r, array_rho):
+        """
+        Takes a spherecial densties and maps/interpolates spherical mesh onto mesh used 
+        in the phase shift calculation. Can be used for matter and proton and neutron 
+        densties.
+    
+        Input parameters
+            array_r   : list or np.array, radius r mesh in spherical coordinates [fm]
+            array_rho : list or np.array, density mesh [?] 
+
+            . array_r and array_rho needs to be the same size
+
+            . Requires z mesh
+        """
+    
+        def rho_funct(r):
+            if r <= (array_r[-1]) :  
+                den_rho_f = Rbf(array_r, array_rho)
+                return den_rho_f(r)
+    
+            else:
+                return 0
+    
+        def rho_z_funct(b):
+            integrand = lambda z: rho_funct(np.sqrt(b**2 + z**2))
+            funct_values = np.array([integrand(i) for i in  self.z_mapped_roots.tolist()])
+            results_b = np.sum(self.z_weights * funct_values)
+            return results_b 
+
+        results_z = np.array( [rho_z_funct(i) for i in self.t_mapped_roots.tolist()])
+        return results_z
+
+
+
+    
+class Profile_Function:
+    """
+    Interpolates profile function paramters for a certain reaction energy and plugs parameters into Gamma(b). Results are only relayable between  E= 40 - 1000 MeV.
+         
+    Input paramters: 
+    interaction_type: (string), Type of reaction [ "general", "np", "matter"] 
+    E      : (float),  Energy of reaction [MeV]
+
+    Built in general form of the profile function -> Gamma(b)
+    
+    Class parameters
+    b: float, but could also be an array
+    alpha  : (float), the NN scattering amplitude [ ]
+    beta   : (float), the finite range parameter [fm^2]
+    sigma_n:(float), the nucleon nucleon cross section [fm^2]
+    """ 
+
+    def __init__(self, Model_type = "general", E = 1):
+        self.alpha = 1
+        self.beta = 1
+        self.sigma_n = 1
+        
+        self.Gamma = lambda b: (1 - 1j * self.alpha) / (4 * np.pi * self.beta) * self.sigma_n * np.exp(-b**2 / (2 * self.beta))
+        
+        if (Model_type == "np"):
+    
+            profile_funct_table = np.genfromtxt("new_profile_funct_params.txt", unpack = True, skip_header= 2)
+    
+
+            sigma_pp_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
+            alphapp_fun = CubicSpline(profile_funct_table[0],profile_funct_table[2])
+            betapp_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[3])
+
+            sigma_pn_fun = CubicSpline(profile_funct_table[0],profile_funct_table[4])
+            alphapn_fun = CubicSpline(profile_funct_table[0],profile_funct_table[5])
+            betapn_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[6])
+
+            sigma_pp = sigma_pp_fun(E)
+            alphapp = alphapp_fun(E)
+            betapp  = betapp_fun(E)
+
+            sigma_pn = sigma_pn_fun(E)
+            alphapn = alphapn_fun(E)
+            betapn  = betapn_fun(E) 
+        
+            self.Gamma = lambda b :(1 -  1j * alphapn)/( 4 * np.pi * betapn)*sigma_pn * np.exp( - b**2/(2 *betapn) ) + (1 -  1j * alphapp)/( 4 * np.pi * betapp) * sigma_pp * np.exp( - b**2/(2 *betapp) )
+
+        if (Model_type == "matter"):
+    
+            profile_funct_table = np.genfromtxt("profile_funct_param_matter.txt", unpack = True, skip_header= 2)
+
+            sigma_NN_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
+            alpha_fun = CubicSpline(profile_funct_table[0],profile_funct_table[2])
+            beta_fun  = CubicSpline(profile_funct_table[0],profile_funct_table[3])
+
+            self.sigma_n = sigma_NN_fun(E)
+            self.alpha = alpha_fun(E)
+            self.beta  = beta_fun(E)
+    
