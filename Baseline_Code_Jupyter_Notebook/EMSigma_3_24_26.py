@@ -27,6 +27,9 @@ Edit: March 23rd, 2026. - Found a bug in chi_no_dens. The input file was  chi_no
 
 Edit: March 24th, 2026. - Turn everything into one class, to remove global variables
                         - removed rm_rms
+                        - removed all of the roots variables from the initialization
+                        - commented out all of the global variables used for meshes
+                        - removed whitespaces to make code more readable
 """
 import numpy as np
 from numpy.polynomial import legendre
@@ -67,16 +70,16 @@ class Eikonal_Model:
             # Map the roots from [-1, 1] to the interval [a, b]
             x_mapped_roots = 0.5 * (x_roots + 1) * (xb - xa) + xa
 
-            return x_roots, x_weights, x_mapped_roots
+            return x_weights, x_mapped_roots
 
         # Defining legendre mesh
-        r_roots, self.r_weights, self.r_mapped_roots = mesh_creator(xa =ra, xb =rb ,x_numpoints = self.r_numpoints)
-        b_roots, self.b_weights, self.b_mapped_roots = mesh_creator(xa =ba, xb =bb ,x_numpoints = self.b_numpoints)
-        z_roots, self.z_weights, self.z_mapped_roots = mesh_creator(xa =za, xb =zb ,x_numpoints = self.z_numpoints)
-        s_roots, self.s_weights, self.s_mapped_roots = mesh_creator(xa =sa, xb = sb, x_numpoints = self.numpoints)
-        s_theta_roots, self.s_theta_weights, self.s_theta_mapped_roots = mesh_creator(xa =s_theta_a, xb = s_theta_b, x_numpoints = self.numpoints_theta)
-        t_roots, self.t_weights, self.t_mapped_roots = mesh_creator(xa =ta, xb =tb, x_numpoints = self.numpoints)
-        t_theta_roots, self.t_theta_weights, self.t_theta_mapped_roots = mesh_creator(xa =t_theta_a , xb =t_theta_b, x_numpoints = self.numpoints_theta)
+        self.r_weights, self.r_mapped_roots = mesh_creator(xa =ra, xb =rb ,x_numpoints = self.r_numpoints)
+        self.b_weights, self.b_mapped_roots = mesh_creator(xa =ba, xb =bb ,x_numpoints = self.b_numpoints)
+        self.z_weights, self.z_mapped_roots = mesh_creator(xa =za, xb =zb ,x_numpoints = self.z_numpoints)
+        self.s_weights, self.s_mapped_roots = mesh_creator(xa =sa, xb = sb, x_numpoints = self.numpoints)
+        self.s_theta_weights, self.s_theta_mapped_roots = mesh_creator(xa =s_theta_a, xb = s_theta_b, x_numpoints = self.numpoints_theta)
+        self.t_weights, self.t_mapped_roots = mesh_creator(xa =ta, xb =tb, x_numpoints = self.numpoints)
+        self.t_theta_weights, self.t_theta_mapped_roots = mesh_creator(xa =t_theta_a , xb =t_theta_b, x_numpoints = self.numpoints_theta)
 
 #_ Vector operations____________________________________________________________________________________________________________________________
 
@@ -231,21 +234,13 @@ class Eikonal_Model:
         rho_p : (list/array size = t_numpoints), projectile density [fm]
         Gamma : (function(b)), profile function [1/fm^2]
         """
-
-        # import s mesh
-        #global sa, sb, s_weights, s_mapped_roots 
-        #global ta, tb, t_weights, t_mapped_roots 
-
-        #    global t_theta_a, t_theta_b, t_theta_weights, t_theta_mapped_roots
-
-           #defining integrand
+        
+        #defining integrand
 
         def chi_t(b,s, theta_s, theta_t):
 
             t_integrand = lambda t :  t * Gamma(self.add_sub_vec_mag(b, 0, s, theta_s, t, theta_t)) 
-       
             func_values =t_integrand(self.t_mapped_roots[:, np.newaxis, np.newaxis, np.newaxis])*rho_t[:, np.newaxis, np.newaxis, np.newaxis]
-
             # Perform Gaussian Legendre integration
             t_result = np.sum(self.t_weights[:, np.newaxis, np.newaxis, np.newaxis] * func_values, axis= 0)
 
@@ -254,9 +249,7 @@ class Eikonal_Model:
         def chi_theta_t(b,s, theta_s):
 
             t_theta_integrand = lambda theta_t : chi_t(b,s, theta_s, theta_t)
-
             func_values = t_theta_integrand(self.t_theta_mapped_roots[:, np.newaxis, np.newaxis])
-        
             # Perform Gaussian Legendre integration
             t_theta_result = np.sum(self.t_theta_weights[:, np.newaxis, np.newaxis] * func_values, axis= 0) 
 
@@ -265,18 +258,14 @@ class Eikonal_Model:
         def chi_s(b, theta_s):
 
             s_integrand = lambda s: s * (1 - np.exp(-chi_theta_t(b,s, theta_s)) )
-        
             func_values = s_integrand(self.s_mapped_roots[:, np.newaxis])* rho_p[:, np.newaxis]
-        
             # Perform Gaussian Legendre integration
             s_result = np.sum(self.s_weights[:, np.newaxis] * func_values, axis = 0) 
 
             return s_result
 
         integrand = lambda theta_s: .5j * chi_s(b, theta_s)
-
         func_values = integrand(self.s_theta_mapped_roots)
-
         # Perform Gaussian Legendre integration
         result = np.sum(self.s_theta_weights * func_values, axis = 0)  
     
@@ -310,22 +299,11 @@ class Eikonal_Model:
 
             uses s t and theta meshs
             """
-    
-           # import s mesh
-            #global sa, sb, s_weights, s_mapped_roots 
-            #global ta, tb, t_weights, t_mapped_roots 
-
-            #global t_theta_a, t_theta_b, t_theta_weights, t_theta_mapped_roots
-
             #defining integrand
-    
-    
             def chi_t(b,s, theta_s, theta_t):
 
                 t_integrand = lambda t : 1j* s * t * Gamma(self.add_sub_vec_mag(b, 0, s, theta_s, t, theta_t)) 
-       
                 func_values = t_integrand(self.t_mapped_roots[:, np.newaxis, np.newaxis, np.newaxis]) * rho_t[:, np.newaxis, np.newaxis, np.newaxis]
-        
                 # Perform Gaussian Legendre integration
                 t_result = np.sum(self.t_weights[:, np.newaxis, np.newaxis, np.newaxis] * func_values, axis = 0)
 
@@ -334,9 +312,7 @@ class Eikonal_Model:
             def chi_theta_t(b,s, theta_s):
 
                 t_theta_integrand = lambda theta_t : chi_t(b,s, theta_s, theta_t)
-
-                func_values =t_theta_integrand(self.t_theta_mapped_roots[:, np.newaxis, np.newaxis])
-        
+                func_values =t_theta_integrand(self.t_theta_mapped_roots[:, np.newaxis, np.newaxis])        
                 # Perform Gaussian Legendre integration
                 t_theta_result = np.sum(self.t_theta_weights[:, np.newaxis, np.newaxis] * func_values, axis = 0) 
 
@@ -345,18 +321,14 @@ class Eikonal_Model:
             def chi_s(b, theta_s):
 
                 s_integrand = lambda s: chi_theta_t(b,s, theta_s)
-
-                func_values =s_integrand(self.s_mapped_roots[:, np.newaxis])* rho_p [:, np.newaxis]
-        
+                func_values =s_integrand(self.s_mapped_roots[:, np.newaxis])* rho_p [:, np.newaxis]        
                # Perform Gaussian Legendre integration
                 s_result = np.sum(self.s_weights[:, np.newaxis] * func_values, axis = 0) 
 
                 return s_result
 
-            integrand = lambda theta_s: chi_s(b, theta_s)
-    
+            integrand = lambda theta_s: chi_s(b, theta_s)    
             func_values =integrand(self.s_theta_mapped_roots)
-
             # Perform Gaussian Legendre integration
             result = np.sum(self.s_theta_weights * func_values, axis = 0)  
 
@@ -375,19 +347,9 @@ class Eikonal_Model:
         uses s, t and theta meshs
         """
 
-        # import s mesh
-        #global sa, sb, s_weights, s_mapped_roots 
-        #global ta, tb, t_weights, t_mapped_roots 
-
-        #global t_theta_a, t_theta_b, t_theta_weights, t_theta_mapped_roots
-
-        #defining integrand
-
         def chi_s(b, theta_s):
 
-            s_integrand = lambda  s, : 1j * s * (Gamma(self.add_sub_vec_mag(b,0,s,theta_s,0,0))) 
-
-        
+            s_integrand = lambda  s, : 1j * s * (Gamma(self.add_sub_vec_mag(b,0,s,theta_s,0,0)))      
             func_values =s_integrand(self.s_mapped_roots[:, np.newaxis])* rho[:, np.newaxis]
             # Perform Gaussian Legendre integration
             s_result = np.sum(self.s_weights[:, np.newaxis] * func_values, axis = 0) 
@@ -395,7 +357,6 @@ class Eikonal_Model:
             return s_result
 
         integrand = lambda theta_s: chi_s(b, theta_s)
-
         func_values =integrand(self.s_theta_mapped_roots)
         # Perform Gaussian Legendre integration
         result = np.sum(self.s_theta_weights * func_values, axis = 0)  
@@ -416,8 +377,6 @@ class Eikonal_Model:
 
         uses b mesh
         """
-   
-        #global ba, bb, b_numpoints, b_roots, b_weights, b_mapped_roots
  
         if (Model == "OLA p-n"):
         
@@ -498,7 +457,6 @@ class Eikonal_Model:
 
         uses b mesh
         """
-            #global ba, bb, b_numpoints, b_roots, b_weights, b_mapped_roots
         
         if (Model == "MOL"):
             sigma_R_int= lambda b: 2 * np.pi * b * (1 - np.exp(- 2 * self.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, Gamma_pp, Gamma_pn, Gamma_nn).imag ) )
