@@ -475,9 +475,9 @@ class Eikonal_Model:
         Gamma_nn : (function(b)), neutron-neutron profile function [1/fm^2]
         """
     
-        chi_pp = self.Chi_ola(b, rho_t_p, rho_p_p, Gamma_pp )
-        chi_pn = self.Chi_ola(b, rho_t_p, rho_p_n,  Gamma_pn) + self.Chi_ola(b, rho_t_n, rho_p_p, Gamma_pn) 
-        chi_nn = self.Chi_ola(b, rho_t_n, rho_p_n, Gamma_nn )
+        chi_pp = self.chi(b, rho_t_p, rho_p_p, Gamma_pp )
+        chi_pn = self.chi(b, rho_t_p, rho_p_n,  Gamma_pn) + self.chi(b, rho_t_n, rho_p_p, Gamma_pn) 
+        chi_nn = self.chi(b, rho_t_n, rho_p_n, Gamma_nn )
         return (chi_pp + chi_pn + chi_nn)
 
 
@@ -509,7 +509,7 @@ class Eikonal_Model:
             sigma_R_int= lambda b: 2 * np.pi * b * (1 - np.exp(- 2 * self.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n,Gamma_pp, Gamma_pn, Gamma_nn).imag ) )
             func_values = np.array( [sigma_R_int(i) for i in self.b_mapped_roots.tolist()])
         
-            # Perform Gaussian Legendre integration
-            result = np.sum(self.b_weights * func_values) 
+        # Perform Gaussian Legendre integration
+        result = np.sum(self.b_weights * func_values) 
 
         return result * 10
