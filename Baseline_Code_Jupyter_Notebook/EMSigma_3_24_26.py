@@ -32,7 +32,7 @@ Edit: March 24th, 2026. - removed rm_rms
                         - removed whitespaces to make code more readable
                         - removed scipy.optimize, scipy, and interp1d
                         - removed rhoz_p
-                        - Created 3 classes, cross_sections, densities ,profile_function
+                        - Created 2 classes, cross_sections,profile_function
 """
 import numpy as np
 from numpy.polynomial import legendre
@@ -166,7 +166,6 @@ class cross_section:
         Gamma : (function(b)), profile function [1/fm^2]
         """
         return self.Chi_mol_1(b, rho_t, rho_p, Gamma) + self.Chi_mol_1(b, rho_p, rho_t, Gamma)
-
 
 #_____________________________________________________________________________________________________________________________________
     def chi(self,b, rho_t, rho_p, Gamma):
@@ -356,7 +355,7 @@ class cross_section:
     
 
 #__functions_____________________________________________________________________________________________________________________________
-
+    """
 class densities:
     def __init__(self):
        #max values for our mesh
@@ -364,7 +363,7 @@ class densities:
         self.z_numpoints =20
         za, zb = -self.zmax, self.zmax#fm 
         self.z_weights, self.z_mapped_roots = mesh_creator(xa =za, xb =zb ,x_numpoints = self.z_numpoints)
-    
+    """   
     def rho_m( self, r, C_m_p = 0, a_m_p = 0, rho_0_p = 0):
         """
         Calculates the density of a two point fermi funciton at r radius
