@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ERRICa"
+authors = [
+  {name="Andrew John Smith", email="smithan@frib.msu.edu"}
+]
+description = "Calculable R-matrix solver for quantum scattering using just-in-time compilation for performance."
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.12"
+dynamic = ["dependencies", "version"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools_scm]
+write_to = "src/jitr/__version__.py"
