@@ -37,7 +37,6 @@ Edit: March 24th, 2026. - removed rm_rms
 Edit: March 31th, 2026. - created functions, matter_radius, charge_radius, neutron_skin
                         - created class density
                         - moved rho_m() to density function
-
 """
 import numpy as np
 from numpy.polynomial import legendre
@@ -464,20 +463,27 @@ class Profile_Function:
             self.alpha = alpha_fun(E)
             self.beta  = beta_fun(E)
 
-class Density: 
-    
-    def rho_m( self, r, C_m_p = 0, a_m_p = 0, rho_0_p = 0):
+class Density:
+    """ 
+    Input paramters
+        C_m_p  : (float), half-density radius
+        a_m_p  : (float), diffuseness [fm]
+        rho_0_p : (float), the saturation density [fm^-3]
+    """
+    def __init__(self):
+     self.C_m_p = 0 
+     self.a_m_p = 0 
+     self.rho_0_p = 0
+
+    def rho_m(self, r):
         """
         Calculates the density of a two point fermi funciton at r radius
-    
         Input paramters
             r       : (float), radius in spherical coordinates [fm]
-            #C_m_p  : (float), half-density radius
-            #a_m_p  : (float), diffuseness [fm]
-            rho_0_p : (float), the saturation density [fm^-3]"""
-        return rho_0_p /(1 + np.exp((r - C_m_p)/a_m_p))
+        """
+        return self.rho_0_p /(1 + np.exp((r - self.C_m_p)/self.a_m_p))
     
-    def rms_matter (r_mesh ,rho_m_mesh , A):
+    def rms_matter (self, r_mesh ,rho_m_mesh , A):
         """Calculates the root mean squared matter radius of an isotope. r_mesh and rho_m_mesh should be the same size.
 
             Input parameters
@@ -485,9 +491,9 @@ class Density:
             rho_m_mesh: (list/array), matter density of a nucleius as a function of radius [1/fm^3]
             A: (float), Mass number [ ]
         """
-        return np.sqrt( ( 4 * np.pi * 1/A) * np.sum(rho_m_mesh * (r_mesh**4)) * (r_mesh[1] - r_mesh[0]))
+        return np.sqrt( ( 4 * np.pi * 1/A)  * np.sum(np.array(rho_m_mesh) * (np.array(r_mesh)**4)) * (r_mesh[1] - r_mesh[0]))
 
-    def rms_charge (r_mesh ,rho_ch_mesh , Z):
+    def rms_charge (self, r_mesh ,rho_ch_mesh , Z):
         """Calculates the root mean squared charge radius of an isotope.r_mesh and rho_ch_mesh should be the same size.
 
                 Input parameters
@@ -495,9 +501,9 @@ class Density:
                 rho_ch_mesh: (list/array), charge density of a nucleius as a function of radius [1/fm^3]
                 Z: (float), Proton number [ ]
         """
-        return np.sqrt( ( 4 * np.pi * 1/Z) * np.sum(rho_ch_mesh * (r_mesh**4)) * (r_mesh[1] - r_mesh[0]))
+        return np.sqrt( ( 4 * np.pi * 1/Z) * np.sum(np.array(rho_ch_mesh) * (np.array(r_mesh)**4)) * (r_mesh[1] - r_mesh[0]))
 
-    def neutron_skin(r_mesh, rho_p_mesh, rho_n_mesh, A, Z ):
+    def neutron_skin(self, r_mesh, rho_p_mesh, rho_n_mesh, A, Z ):
         """Calculates the neutron skin of an isotope. r_mesh, rho_n_mesh, and rho_p_mesh should be the same size.
 
                 Input parameters
@@ -508,9 +514,8 @@ class Density:
                 Z: (float), Proton number [ ]"""
    
         dr = (r_mesh[1] - r_mesh[0]) 
-        rms_proton = np.sqrt( ( 4 * np.pi * 1/Z) * np.sum(rho_p_mesh * (r_mesh**4)) * dr)
-        rms_neutron = np.sqrt( ( 4 * np.pi * 1/(A-Z)) * np.sum(rho_n_mesh * (r_mesh**4)) * dr)
+        rms_proton = np.sqrt( ( 4 * np.pi * 1/Z) * np.sum(np.array(rho_p_mesh) * (np.array(r_mesh)**4)) * dr)
+        rms_neutron = np.sqrt( ( 4 * np.pi * 1/(A-Z)) * np.sum(np.array(rho_n_mesh) * (np.array(r_mesh)**4)) * dr)
     
         return rms_neutron - rms_proton
-
 
