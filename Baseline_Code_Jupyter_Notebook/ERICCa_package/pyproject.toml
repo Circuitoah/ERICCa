@@ -7,10 +7,10 @@ name = "ERRICa"
 authors = [
   {name="Andrew John Smith", email="smithan@frib.msu.edu"}
 ]
-description = "Calculable R-matrix solver for quantum scattering using just-in-time compilation for performance."
+description = "A nuclear reaction code that calculates nucleus-nucleus reaction cross section in the eikonal framework"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.12"
+requires-python = ">=3.9"
 dynamic = ["dependencies", "version"]
 classifiers = [
     "Programming Language :: Python :: 3",
