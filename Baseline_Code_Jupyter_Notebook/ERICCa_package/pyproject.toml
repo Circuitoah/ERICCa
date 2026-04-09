@@ -21,4 +21,4 @@ classifiers = [
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools_scm]
-write_to = "src/jitr/__version__.py"
+write_to = "src/ERICCa/__version__.py"

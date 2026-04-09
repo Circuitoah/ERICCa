@@ -6,7 +6,10 @@ Edit: Febuary 2nd, 2026.  Commenting the code in prep for publications if the co
 Edit:Febuary 3rd, 2026. Found a bug in the code, bmax was set to rmax. This means our calculatations were off by ~5 mb. BUG HAS BEEN FIXED. Please use this version of the code.
 
 Edit: March 23rd, 2026. Found a bug in chi_no_dens. The input file was  chi_no_dens(b , rho, Gammap) instead of  chi_no_dens(b , rho, Gamma). This apear during 5_14_25 update when Gamma was added as an input. This therefore post-dates the benchmarked that  chi_no_dens was used in. 
+
+Edit: April 9th, 2026.  I found a bug in my code, in chi_mol_micro the rho_n_p and rho_p_n switched places in the function. THIS BUG HAS BEEN FIXED. Pleas euse this version of the code.
 """
+
 
 import numpy as np
 from numpy.polynomial import legendre
@@ -563,7 +566,7 @@ def sigma_R( rho_t,  rho_p  = 0, Gamma = lambda b: np.exp(-b), Model = "OLA"):
 
     return result * 10
 
-def chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_n,rho_p_p, Gamma_pp, Gamma_pn, Gamma_nn ):
+def chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p ,rho_p_n, Gamma_pp, Gamma_pn, Gamma_nn ):
     chi_pp = Chi_mol(b, rho_t_p, rho_p_p, Gamma_pp )
     chi_pn = Chi_mol(b, rho_t_p, rho_p_n, Gamma_pn ) + Chi_mol(b, rho_t_n, rho_p_p, Gamma_pn )
     chi_nn = Chi_mol(b, rho_t_n, rho_p_n, Gamma_nn )
