@@ -41,7 +41,7 @@ Edit: March 31th, 2026. - created functions, matter_radius, charge_radius, neutr
 Edit: April 9th, 2026.  I found a bug in my code, in chi_mol_micro the rho_n_p and rho_p_n switched places in the function. THIS BUG HAS BEEN FIXED. Pleas euse this version of the code.
                         - Removed matter radius, charge raidus and neutron skins, condensed into one function rms
 
-Edit: April 10th, 2026.  The proton-target Eikonal phase only works in the context of if the
+Edit: April 11th, 2026.  The proton-target Eikonal phase only works in the context of if the
                         proton and neutron densities are equal because this was only meant as a benchmark. 
                         This version of the phase has extremely narrow utility, so I will be expanding it 
                         to a more generalized form. 
@@ -51,11 +51,13 @@ Edit: April 10th, 2026.  The proton-target Eikonal phase only works in the conte
                         - the line "func_values = np.array( [sigma_R_int(i) for i in self.b_mapped_roots.tolist()])"
                         found in sigma_R_mat and sigma_R_pn in the if statemetns  
                         - Added self.Gamma_pn and self.Gamma_pn functions to profile functions class
+                        - Added function rho_m_2pt_fermi to Density
                         """
 
 import numpy as np
 from numpy.polynomial import legendre
 from scipy.interpolate import Rbf, CubicSpline
+from scipy.optimize import minimize
 
 def mesh_creator(xa = 0, xb = 10 ,x_numpoints = 20):
 
@@ -508,5 +510,48 @@ class Density:
             A: (float), Mass number [ ]
         """
         return np.sqrt( ( 4 * np.pi * 1/A)  * np.sum(np.array(rho_mesh) * (np.array(r_mesh)**4)) * (r_mesh[1] - r_mesh[0]))
+    
+    def rho_m_2pt_fermi(self, A, rms_measured, ra =0, rb=30 , r_points = 1000):
+        """
+        Given an mass number and An rms matter radius of a nucleius, will fit parameters C_m_p, a_m_p, and rho_0_p for
+        function rho_m(r). The minimized parameters are found by fitting to the rms matter radius, the mass number A, and
+        the saturation density rho_m(0).
+
+        Input Parameters
+        A: (float), Mass number [ ]
+        rms_measured: (float), measured matter radius of a nuclei [fm]
+        ra: (float), lower bound for integration of the r mesh [fm]
+        rb: (float), upper bound of intergration for the r mesh [fm]
+        r_points: (float), number of points in the mesh [ ]
+        """
+        r_meshy =  np.linspace(ra, rb, r_points)
+
+        def chi_2_rms_min(params):
+            """Calculates the chi squared for the rms matter radius"""
+            self.C_m_p, self.a_m_p, self.rho_0_p = params
+            return (self.rms(r_meshy , self.rho_m(r_meshy) , A) - rms_measured)**2
+
+        def A_return(rho):
+            """
+            Given a function rho(r) calculates the A of the nucleus. This was ment to be a benchmark
+            """
+            integrand = lambda r :  4 * np.pi* (r**2)  * rho(r)
+            return np.sum(integrand(r_meshy)) * (r_meshy[1]-r_meshy[0])
+
+        def A_min(params):
+            self.C_m_p, self.a_m_p, self.rho_0_p = params
+            return abs(A_return(self.rho_m) - A)
+
+        def sat_min(params):
+            self.C_m_p, self.a_m_p, self.rho_0_p = params
+            return abs(self.rho_m(0) - 0.176)
+
+        constraints=  [{'type': 'eq', 'fun': A_min},
+                     {'type': 'eq', 'fun': sat_min}]
+
+        dens_min = minimize(chi_2_rms_min, [ 4.1, .5, .176], constraints=constraints)
+
+        self.C_m_p, self.a_m_p, self.rho_0_p =  dens_min.x
+        return
 
 
