@@ -1,4 +1,5 @@
 #Version 4_11_2026
+# Update 4_15_2026 - added update mesh function
 
 import numpy as np
 from numpy.polynomial import legendre
@@ -14,6 +15,26 @@ def mesh_creator(xa = 0, xb = 10 ,x_numpoints = 20):
     return x_weights, x_mapped_roots
 
 class cross_section:
+
+    def update_mesh(self):
+        """ """
+        #Defining bounds of integrations
+        self.ra, self.rb = 0, self.rmax #fm 
+        self.ba, self.bb = 0, self.bmax #fm   
+        self.za, self.zb = -self.zmax, self.zmax#fm 
+        self.sa, self.sb =  0, self.st_max #fm
+        self.s_theta_a, self.s_theta_b = 0, 2*np.pi 
+        self.ta, self.tb =0, self.st_max #fm
+        self.t_theta_a , self.t_theta_b = 0, 2 * np.pi
+        
+        self.r_weights, self.r_mapped_roots = mesh_creator(xa =self.ra, xb =self.rb ,x_numpoints = self.r_numpoints)
+        self.b_weights, self.b_mapped_roots = mesh_creator(xa =self.ba, xb =self.bb ,x_numpoints = self.b_numpoints)
+        self.z_weights, self.z_mapped_roots = mesh_creator(xa =self.za, xb =self.zb ,x_numpoints = self.z_numpoints)
+        self.s_weights, self.s_mapped_roots = mesh_creator(xa =self.sa, xb = self.sb, x_numpoints = self.numpoints)
+        self.s_theta_weights, self.s_theta_mapped_roots = mesh_creator(xa =self.s_theta_a, xb = self.s_theta_b, x_numpoints = self.numpoints_theta)
+        self.t_weights, self.t_mapped_roots = mesh_creator(xa =self.ta, xb =self.tb, x_numpoints = self.numpoints)
+        self.t_theta_weights, self.t_theta_mapped_roots = mesh_creator(xa =self.t_theta_a , xb =self.t_theta_b, x_numpoints = self.numpoints_theta)
+        return  
 
     def __init__(self):
         """
@@ -42,23 +63,7 @@ class cross_section:
         self.b_numpoints = 35
         self.z_numpoints =20
         
-        #Defining bounds of integrations
-        ra, rb = 0, self.rmax #fm 
-        ba, bb = 0, self.bmax #fm   
-        za, zb = -self.zmax, self.zmax#fm 
-        sa,sb =  0, self.st_max #fm
-        s_theta_a, s_theta_b = 0, 2*np.pi 
-        ta, tb =0, self.st_max #fm
-        t_theta_a , t_theta_b = 0, 2 * np.pi
-        
-        # Defining legendre mesh
-        self.r_weights, self.r_mapped_roots = mesh_creator(xa =ra, xb =rb ,x_numpoints = self.r_numpoints)
-        self.b_weights, self.b_mapped_roots = mesh_creator(xa =ba, xb =bb ,x_numpoints = self.b_numpoints)
-        self.z_weights, self.z_mapped_roots = mesh_creator(xa =za, xb =zb ,x_numpoints = self.z_numpoints)
-        self.s_weights, self.s_mapped_roots = mesh_creator(xa =sa, xb = sb, x_numpoints = self.numpoints)
-        self.s_theta_weights, self.s_theta_mapped_roots = mesh_creator(xa =s_theta_a, xb = s_theta_b, x_numpoints = self.numpoints_theta)
-        self.t_weights, self.t_mapped_roots = mesh_creator(xa =ta, xb =tb, x_numpoints = self.numpoints)
-        self.t_theta_weights, self.t_theta_mapped_roots = mesh_creator(xa =t_theta_a , xb =t_theta_b, x_numpoints = self.numpoints_theta)
+        self.update_mesh()
 
 #_ Vector operations____________________________________________________________________________________________________________________________
 
