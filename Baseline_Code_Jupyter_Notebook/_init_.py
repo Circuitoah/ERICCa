@@ -1,3 +1,3 @@
-import Cross_sections
-import Profile_function
-import Density
+from cross_sections import*
+from Profile_function import*
+from Density import*
