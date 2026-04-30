@@ -1,7 +1,7 @@
 #importing the necessary libraries and modules for test
 import matplotlib.pyplot as plt
 import numpy as np
-import Baseline as ERICCa_Baseline
+import ERICCa_package.src.ERICCA.Baseline as ERICCa_Baseline
 import ERICCa_package.src.ERICCA._init_ as ERICCa
 
 cross_section = ERICCa.cross_section()
