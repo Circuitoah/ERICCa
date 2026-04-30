@@ -111,11 +111,13 @@ else:
 #Cross section tests
 
 #Test 6: Testing the density mesh interpolator for both the baseline and the updated code to ensure they produce the same results.
-C = np.genfromtxt("Cor_dens_Update/Cor_Ca_C_Mass_dens/12Crho-mass.txt", unpack= True) 
-C_r_mesh = np.genfromtxt("Cor_dens_Update/Cor_Ca_C_Mass_dens/12C_radius.txt", unpack= True)
+C_r_mesh = np.linspace(0.01, 15, 100)
+example_dens = EM0_Class.Density()
+example_dens.rho_m_2pt_fermi(12, 2.32)
+C = example_dens.rho_m(C_r_mesh)
 
-C_rho_baseline = EM0_base.dens_b_interpolator(C_r_mesh[0],C[0])
-C_rho_update = cross_section.dens_b_interpolator(C_r_mesh[0],C[0])
+C_rho_baseline = EM0_base.dens_b_interpolator(C_r_mesh,C)
+C_rho_update = cross_section.dens_b_interpolator(C_r_mesh,C)
 
 Baseline_t6 = C_rho_baseline[0]
 Updated_t6 = C_rho_update[0]
@@ -137,25 +139,24 @@ else:
     plt.show()
 
 #Load in densities for tests
-C_r_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/12C_radius.txt",])     
-C_p_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/12Crho-prot.txt",])
-C_n_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/12Crho-neut.txt",])
-C_p = np.genfromtxt(C_p_Filename[0], unpack= True)
-C_r_mesh = np.genfromtxt(C_r_Filename[0], unpack= True)
-C_n = np.genfromtxt(C_n_Filename[0], unpack= True)
+example_dens = EM0_Class.Density()
+C_r_mesh = np.linspace(0.01, 15, 100)
+example_dens.rho_m_2pt_fermi(6, 2.1, ra =0, rb=15 , r_points = 1000)
+C_p = example_dens.rho_m(C_r_mesh)
+example_dens.rho_m_2pt_fermi(6, 2.3, ra =0, rb=15 , r_points = 1000)
+C_n = example_dens.rho_m(C_r_mesh)
 
-C_rho_p = cross_section.dens_b_interpolator(C_r_mesh[0], C_p[0]) 
-C_rho_n = cross_section.dens_b_interpolator(C_r_mesh[0], C_n[0])
+C_rho_p = cross_section.dens_b_interpolator(C_r_mesh, C_p) 
+C_rho_n = cross_section.dens_b_interpolator(C_r_mesh, C_n)
 
-Ca_r_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/42Ca_radius.txt",])     
-Ca_p_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/42Carho-prot.txt",])
-Ca_n_Filename = np.array(["Cor_dens_Update/Cor_Ca_C_Mass_dens/42Carho-neut.txt",])
-Ca_p = np.genfromtxt(Ca_p_Filename[0], unpack= True)
-Ca_r_mesh = np.genfromtxt(Ca_r_Filename[0], unpack= True)
-Ca_n = np.genfromtxt(Ca_n_Filename[0], unpack= True)
+Ca_r_mesh = np.linspace(0.01, 15, 100)
+example_dens.rho_m_2pt_fermi(20, 3.3, ra =0, rb=15 , r_points = 1000)
+Ca_p = example_dens.rho_m(Ca_r_mesh)
+example_dens.rho_m_2pt_fermi(22, 3.4, ra =0, rb=15 , r_points = 1000)
+Ca_n = example_dens.rho_m(Ca_r_mesh)
 
-Ca_rho_p = cross_section.dens_b_interpolator(Ca_r_mesh[0], Ca_p[0]) 
-Ca_rho_n = cross_section.dens_b_interpolator(Ca_r_mesh[0], Ca_n[0])
+Ca_rho_p = cross_section.dens_b_interpolator(Ca_r_mesh, Ca_p) 
+Ca_rho_n = cross_section.dens_b_interpolator(Ca_r_mesh, Ca_n)
 
 #Test 7: Testing the Chi_mol_1 function for both the baseline and the updated code to ensure they produce the same results when using the "matter" setting for the profile function.
 b = 3
@@ -338,8 +339,8 @@ test_dens = EM0_Class.Density()
 A = 42
 Z = 20 
 
-Baseline_t18 =[3.4481556494276426, 3.4481556494276426, 0.014023505542324788]
-Updated_t18 = [test_dens.rms(Ca_r_mesh[1] ,Ca_p[1] + Ca_n[1], A), test_dens.rms(Ca_r_mesh[1], Ca_p[1] + Ca_n[1], A), -test_dens.rms(Ca_r_mesh[1], Ca_p[1],Z) + test_dens.rms(Ca_r_mesh[1], Ca_n[1], A-Z ) ]
+Baseline_t18 =[3.3527555195621557, 3.3527555195621557, 0.10000080309561588]
+Updated_t18 = [test_dens.rms(Ca_r_mesh ,Ca_p + Ca_n, A), test_dens.rms(Ca_r_mesh, Ca_p + Ca_n, A), -test_dens.rms(Ca_r_mesh, Ca_p,Z) + test_dens.rms(Ca_r_mesh, Ca_n, A-Z ) ]
 if np.isclose(Baseline_t18, Updated_t18).all():
     Test_results.append(True)
 else:    
@@ -348,8 +349,6 @@ else:
     print ("Baseline     :",Baseline_t18)
     print ("Updated code :", Updated_t18)
 
-if all(Test_results):
-    print("All tests passed successfully!")
-else:
+if all(Test_results) == False:
     failed_tests = [i+1 for i, result in enumerate(Test_results) if not result]
     print(f"Tests {failed_tests} failed. Please review the output for details.")
