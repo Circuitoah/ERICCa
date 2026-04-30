@@ -1,11 +1,11 @@
 #importing the necessary libraries and modules for test
 import matplotlib.pyplot as plt
 import numpy as np
-import EMSigma_baseline as EM0_base
-import _init_ as EM0_Class
+import Baseline as ERICCa_Baseline
+import _init_ as ERICCa
 
-cross_section = EM0_Class.cross_section()
-Profile_Function = EM0_Class.Profile_Function()
+cross_section = ERICCa.cross_section()
+Profile_Function = ERICCa.Profile_Function()
 
 Test_results =[]
 
@@ -15,7 +15,7 @@ a, theta_a = 2.0, np.pi/3.0
 b, theta_b = 3.0, np.pi/4.0
 c, theta_c = 4.0, np.pi/6.0
 
-Baseline_t1 = EM0_base.add_sub_vec_mag(a, theta_a, b, theta_b, c, theta_c)
+Baseline_t1 = ERICCa_Baseline.add_sub_vec_mag(a, theta_a, b, theta_b, c, theta_c)
 Updated_t1 = cross_section.add_sub_vec_mag(a, theta_a, b, theta_b, c, theta_c)
 
 if np.isclose(Baseline_t1, Updated_t1):
@@ -28,20 +28,20 @@ else:
     print("Updated Code:", Updated_t1)
 
 #Test 2: Testing the Density function for both the baseline and the updated code to ensure they produce the same results.
-test_dens = EM0_Class.Density()
+test_dens = ERICCa.Density()
 
 test_mesh = np.linspace(0.01,5, 30)
 
-EM0_base.C_m_p = 1 
-EM0_base.a_m_p = 1 
-EM0_base.rho_0_p = 1
+ERICCa_Baseline.C_m_p = 1 
+ERICCa_Baseline.a_m_p = 1 
+ERICCa_Baseline.rho_0_p = 1
 
 test_dens.C_m_p = 1 
 test_dens.a_m_p = 1
 test_dens.rho_0_p = 1
 
 
-Baseline_t2 = EM0_base.rho_m(test_mesh )[-1]
+Baseline_t2 = ERICCa_Baseline.rho_m(test_mesh )[-1]
 Updated_t2 = test_dens.rho_m(test_mesh )[-1]
 
 if np.isclose(Baseline_t2, Updated_t2):
@@ -58,7 +58,7 @@ else:
 
 #Test 3: Testing the Gamma function for both the baseline and the updated code to ensure they produce the same results.
 b = 3.0
-Baseline_t3 = EM0_base.Gamma(b)
+Baseline_t3 = ERICCa_Baseline.Gamma(b)
 
 Profile_Function.alpha = 1.808
 Profile_Function.beta =  .268 
@@ -76,11 +76,11 @@ else:
 
 #Test 4: Testing the profile function using the "matter" setting
 E = 325 #MeV
-EM0_base.profile_funct_param(E, interaction_type = "matter")
-Profile_Function = EM0_Class.Profile_Function(Model_type = "matter", E = 325)
+ERICCa_Baseline.profile_funct_param(E, interaction_type = "matter")
+Profile_Function = ERICCa.Profile_Function(Model_type = "matter", E = 325)
 
 b = 3.0
-Baseline_t4 = EM0_base.Gamma(b)
+Baseline_t4 = ERICCa_Baseline.Gamma(b)
 Updated_t4 = Profile_Function.Gamma(b)
 
 if np.isclose(Baseline_t4, Updated_t4):
@@ -93,11 +93,11 @@ else:
 
 #Test 5: Testing the profile function using the "np" setting
 E = 300 #MeV
-EM0_base.profile_funct_param(E, interaction_type = "np")
-Profile_Function = EM0_Class.Profile_Function(Model_type = "np", E = 300)
+ERICCa_Baseline.profile_funct_param(E, interaction_type = "np")
+Profile_Function = ERICCa.Profile_Function(Model_type = "np", E = 300)
 
 b = 3.0
-Baseline_t5 = EM0_base.Gamma(b)
+Baseline_t5 = ERICCa_Baseline.Gamma(b)
 Updated_t5 = Profile_Function.Gamma_pp(b) + Profile_Function.Gamma_pn(b) 
 
 if np.isclose(Baseline_t5, Updated_t5):
@@ -112,11 +112,11 @@ else:
 
 #Test 6: Testing the density mesh interpolator for both the baseline and the updated code to ensure they produce the same results.
 C_r_mesh = np.linspace(0.01, 15, 100)
-example_dens = EM0_Class.Density()
+example_dens = ERICCa.Density()
 example_dens.rho_m_2pt_fermi(12, 2.32)
 C = example_dens.rho_m(C_r_mesh)
 
-C_rho_baseline = EM0_base.dens_b_interpolator(C_r_mesh,C)
+C_rho_baseline = ERICCa_Baseline.dens_b_interpolator(C_r_mesh,C)
 C_rho_update = cross_section.dens_b_interpolator(C_r_mesh,C)
 
 Baseline_t6 = C_rho_baseline[0]
@@ -130,7 +130,7 @@ else:
     print("Baseline    :", Baseline_t6)
     print("Updated Code:", Updated_t6)
 
-    plt.plot(EM0_base.t_mapped_roots.tolist(),C_rho_baseline, color = "blue", label = "Baseline")
+    plt.plot(ERICCa_Baseline.t_mapped_roots.tolist(),C_rho_baseline, color = "blue", label = "Baseline")
     plt.plot( cross_section.t_mapped_roots.tolist(),C_rho_update, color = "red", label = "Update")
 
     plt.xlabel("b")
@@ -139,7 +139,7 @@ else:
     plt.show()
 
 #Load in densities for tests
-example_dens = EM0_Class.Density()
+example_dens = ERICCa.Density()
 C_r_mesh = np.linspace(0.01, 15, 100)
 example_dens.rho_m_2pt_fermi(6, 2.1, ra =0, rb=15 , r_points = 1000)
 C_p = example_dens.rho_m(C_r_mesh)
@@ -163,10 +163,10 @@ b = 3
 rho_t = C_rho_p + C_rho_n
 rho_p = Ca_rho_p +Ca_rho_n
 
-EM0_base.profile_funct_param(E, interaction_type = "matter")
-Profile_Function = EM0_Class.Profile_Function(Model_type = "matter", E = E)
+ERICCa_Baseline.profile_funct_param(E, interaction_type = "matter")
+Profile_Function = ERICCa.Profile_Function(Model_type = "matter", E = E)
 
-Baseline_t7 = EM0_base.Chi_mol_1(b, rho_t, rho_p, EM0_base.Gamma)
+Baseline_t7 = ERICCa_Baseline.Chi_mol_1(b, rho_t, rho_p, ERICCa_Baseline.Gamma)
 Updated_t7 = cross_section.Chi_mol_1(b, rho_t, rho_p, Profile_Function.Gamma)
 
 if np.isclose(Baseline_t7, Updated_t7):
@@ -178,7 +178,7 @@ else:
     print("Updated Code:",Updated_t7)
 
 #Test 8: Testing the Chi_mol function for both the baseline and the updated code to ensure they produce the same results.
-Baseline_t8 = EM0_base.Chi_mol(b, rho_t, rho_p, EM0_base.Gamma)
+Baseline_t8 = ERICCa_Baseline.Chi_mol(b, rho_t, rho_p, ERICCa_Baseline.Gamma)
 Updated_t8 = cross_section.Chi_mol(b, rho_t, rho_p, Profile_Function.Gamma)
 
 if np.isclose(Baseline_t8, Updated_t8):
@@ -190,7 +190,7 @@ else:
     print("Updated Code:", Updated_t8)
 
 #Test 9: Testing the chi function for both the baseline and the updated code to ensure they produce the same results.
-Baseline_t9 = EM0_base.chi(b, rho_t, rho_p, EM0_base.Gamma)
+Baseline_t9 = ERICCa_Baseline.chi(b, rho_t, rho_p, ERICCa_Baseline.Gamma)
 Updated_t9 = cross_section.chi(b, rho_t, rho_p, Profile_Function.Gamma)
 
 if np.isclose(Baseline_t9, Updated_t9):
@@ -202,8 +202,8 @@ else:
     print("Updated Code:", Updated_t9)
 
 #Test 10: Testing the chi_no_dens function for both the baseline and the updated code to ensure they produce the same results.
-Baseline_t10 = EM0_base.chi_no_dens(b , C_rho_p + C_rho_p, EM0_base.Gamma)
-Updated_t10 = cross_section.chi_no_dens(b , C_rho_p, C_rho_p, EM0_base.Gamma, EM0_base.Gamma)
+Baseline_t10 = ERICCa_Baseline.chi_no_dens(b , C_rho_p + C_rho_p, ERICCa_Baseline.Gamma)
+Updated_t10 = cross_section.chi_no_dens(b , C_rho_p, C_rho_p, ERICCa_Baseline.Gamma, ERICCa_Baseline.Gamma)
 
 if np.isclose(Baseline_t10, Updated_t10):
     Test_results.append(True)
@@ -215,7 +215,7 @@ else:
 
 #Test 11: Testing the sigma_R_matter function for both the baseline and the updated code to ensure they produce the same results when using the "matter" setting for the profile function.
 #in the model ="MOL"
-Baseline_t11 = EM0_base.sigma_R( rho_t,  rho_p  = rho_p , Gamma = EM0_base.Gamma, Model = "MOL")
+Baseline_t11 = ERICCa_Baseline.sigma_R( rho_t,  rho_p  = rho_p , Gamma = ERICCa_Baseline.Gamma, Model = "MOL")
 Updated_t11 = cross_section.sigma_R_matter( rho_t,  rho_p  = rho_p , Gamma = Profile_Function.Gamma, Model = "MOL")
 
 if np.isclose(Baseline_t11, Updated_t11):
@@ -229,7 +229,7 @@ else:
 
 #Test 12: Testing the sigma_R_matter function for both the baseline and the updated code to ensure they produce the same results when using the "matter" setting for the profile function.
 #in the model ="OLA"
-Baseline_t12 = EM0_base.sigma_R( rho_t,  rho_p  = rho_p , Gamma = EM0_base.Gamma, Model = "OLA")
+Baseline_t12 = ERICCa_Baseline.sigma_R( rho_t,  rho_p  = rho_p , Gamma = ERICCa_Baseline.Gamma, Model = "OLA")
 Updated_t12 = cross_section.sigma_R_matter( rho_t,  rho_p  = rho_p , Gamma = Profile_Function.Gamma, Model = "OLA")
 
 if np.isclose(Baseline_t12, Updated_t12):
@@ -244,13 +244,13 @@ else:
 
 #Test 13: Testing the sigma_R_pn function for both the baseline and the updated code to ensure they produce the same results when using the "np" setting for the profile function.
 E = 200 #MeV
-EM0_base.profile_funct_param(E, interaction_type = "np")
-Profile_Function = EM0_Class.Profile_Function(Model_type = "np", E = E)
+ERICCa_Baseline.profile_funct_param(E, interaction_type = "np")
+Profile_Function = ERICCa.Profile_Function(Model_type = "np", E = E)
 
 b_mesh = np.linspace(0, 10, 100)
 test_gamma = lambda b: Profile_Function.Gamma_pp(b) + Profile_Function.Gamma_pn(b)
 
-Baseline_t13 = EM0_base.sigma_R( C_rho_p, Gamma = EM0_base.Gamma, Model = "OLA p-n")
+Baseline_t13 = ERICCa_Baseline.sigma_R( C_rho_p, Gamma = ERICCa_Baseline.Gamma, Model = "OLA p-n")
 Updated_t13 = cross_section.sigma_R_pn( C_rho_p, C_rho_p, Gamma_pp = Profile_Function.Gamma_pp, 
                                        Gamma_pn = Profile_Function.Gamma_pn, Model = "OLA p-n")
 
@@ -263,7 +263,7 @@ else:
     print("Baseline    :", Baseline_t13)
     print("Updated Code:", Updated_t13)
 
-    plt.plot(b_mesh, EM0_base.Gamma(b_mesh), color = "b")
+    plt.plot(b_mesh, ERICCa_Baseline.Gamma(b_mesh), color = "b")
     plt.plot(b_mesh, test_gamma(b_mesh), color = "r" )
     plt.xlabel("b")
     plt.ylabel("$\Gamma(b)$")
@@ -277,8 +277,8 @@ rho_t_n = C_rho_n
 rho_p_p = Ca_rho_p 
 rho_p_n = Ca_rho_n
 
-Baseline_t14 = EM0_base.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap)
-Updated_t14 = cross_section.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap)
+Baseline_t14 = ERICCa_Baseline.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap)
+Updated_t14 = cross_section.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap)
 
 if np.isclose(Baseline_t14, Updated_t14):
     Test_results.append(True)
@@ -290,8 +290,8 @@ else:
     print("Updated Code:", Updated_t14)
 
 #Test 15: Testing the chi_ola_micro function for both the baseline and the updated code to ensure they produce the same results when using the "np" setting for the profile function.
-Baseline_t15 = EM0_base.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap)
-Updated_t15 = cross_section.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap)
+Baseline_t15 = ERICCa_Baseline.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap)
+Updated_t15 = cross_section.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p,rho_p_n, ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap)
 
 if np.isclose(Baseline_t15, Updated_t15):
     Test_results.append(True)
@@ -304,10 +304,10 @@ else:
 
 #Test 16: Testing the sigma_R_pn function for both the baseline and the updated code to ensure they produce the same results when using the "np" setting for the profile function.
 #Model = "OLA"
-Baseline_t16 = EM0_base.sigma_R_micro(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
-                             EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap , Model = "OLA")
+Baseline_t16 = ERICCa_Baseline.sigma_R_micro(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
+                             ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap , Model = "OLA")
 Updated_t16 = cross_section.sigma_R_pn(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
-                             EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap, Model = "OLA")
+                             ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap, Model = "OLA")
 
 if np.isclose(Baseline_t16, Updated_t16):
     Test_results.append(True)
@@ -320,10 +320,10 @@ else:
 
 #Test 17: Testing the sigma_R_pn function for both the baseline and the updated code to ensure they produce the same results when using the "np" setting for the profile function.
 #Model = "MOL"
-Baseline_t17 = EM0_base.sigma_R_micro(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
-                             EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap , Model = "MOL")
+Baseline_t17 = ERICCa_Baseline.sigma_R_micro(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
+                             ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap , Model = "MOL")
 Updated_t17 = cross_section.sigma_R_pn(rho_t_p, rho_t_n, rho_p_p, rho_p_n, 
-                             EM0_base.Gammap, EM0_base.Gamman, EM0_base.Gammap, Model = "MOL")
+                             ERICCa_Baseline.Gammap, ERICCa_Baseline.Gamman, ERICCa_Baseline.Gammap, Model = "MOL")
 
 if np.isclose(Baseline_t17, Updated_t17):
     Test_results.append(True)
@@ -335,7 +335,7 @@ else:
     print("Updated Code:",Updated_t17)
 
 #Test 18: Testing the density function for both the baseline and the updated code to ensure they produce the same results.
-test_dens = EM0_Class.Density()
+test_dens = ERICCa.Density()
 A = 42
 Z = 20 
 
