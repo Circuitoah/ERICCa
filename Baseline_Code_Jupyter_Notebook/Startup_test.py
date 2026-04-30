@@ -344,7 +344,7 @@ if np.isclose(Baseline_t18, Updated_t18).all():
     Test_results.append(True)
 else:    
     Test_results.append(False)
-    print("Test 18 Failed: The density function produces different results for the baseline and updated code.")
+    print("Test 18 Failed: The density function rms produces different results for the baseline and updated code.")
     print ("Baseline     :",Baseline_t18)
     print ("Updated code :", Updated_t18)
 
