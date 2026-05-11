@@ -8,9 +8,9 @@ A reaction code that calculates nucleus-nucleus reaction cross section in the ei
 ```
 The release versions of the package are hosted at [INSERT]
 
-## examples and tutorials
+## Tutorials
 
-Various example scripts live in [`examples/`](INSERT). Tutorials live in [INSERT]
+Tutorials live in [Tutorials/ERICCa_Tutorial.ipynb]
 
 There are some additional requirements to run the examples. Once you've cloned the repo, from the main directory, run:
 
