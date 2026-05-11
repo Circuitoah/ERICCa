@@ -12,15 +12,6 @@ The release versions of the package are hosted at [INSERT]
 
 Tutorials live in [Tutorials/ERICCa_Tutorial.ipynb]
 
-There are some additional requirements to run the examples. Once you've cloned the repo, from the main directory, run:
-
-```
-pip install -r examples/notebooks/requirements.txt
-```
-
-Then, you can run the notebooks. In particular, check out:
-- [`examples/notebooks/.ipynb`](INSERT)
-
 ## description
 
 ## contributing, developing, and testing
@@ -28,7 +19,7 @@ Then, you can run the notebooks. In particular, check out:
 ## citation
 ```latex
 @software{Smith_AJ_ERICCa_2026,
-author = {Smith, Andrew J},
+author = {A. J. Smith, K. Godbey, C. Hebborn, F. M. Nunes},
 license = {?},
 month = April,
 title = {{ERICCa}},
