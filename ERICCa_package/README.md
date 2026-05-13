@@ -1,3 +1,8 @@
+
+<p align="center">
+<img src="ERICCa_Logo.png" alt="drawing" width="300" /> 
+</p>
+
 # Eikonal Reaction, density Input, Cross section Calculator (ERICCa)
 
 A reaction code that calculates nucleus-nucleus reaction cross section in the eikonal framework using nuclear densities as inputs.
