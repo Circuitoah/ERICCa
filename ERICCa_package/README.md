@@ -37,7 +37,7 @@ ERICCa can calculate:
 - Total and reaction cross sections using matter densities and proton and neutron densities as inputs
 - Reaction cross sections with user-provided density distributions
 - Automatic density generation based on rms matter radius and mass number
-- Built-in profile functions for Energies 40-100 MeV
+- Built-in profile functions for Energies 40-1000 MeV
 The package is designed for experimental nuclear physicists, and those studying exotic nuclei and nuclear collisions.
 
 ## contributing, developing, and testing
