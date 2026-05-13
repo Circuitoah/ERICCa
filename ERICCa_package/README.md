@@ -26,7 +26,7 @@ If Tutorials is too long use /Tutorials/ERICCa_TLDR.ipynb
 
 ### Key Features
 
-- **Eikonal Framework**: Employs the two-body eikonal framework for fast and efficient computation of reaction cross sections
+- **Eikonal Framework**: Employs the two-body eikonal framework for fast computation of reaction cross sections
 - **Density-Based Approach**:nuclear density distributions (matter or proton, and neutron densities) as inputs
 - **Accurate Integration**: Implements multi-dimensional numerical integration with adaptive mesh configurations
 - **Validated Results**: Benchmarked against experimental reaction data
@@ -34,11 +34,10 @@ If Tutorials is too long use /Tutorials/ERICCa_TLDR.ipynb
 ### Capabilities
 
 ERICCa can calculate:
-- Total and reaction cross sections using matter densities and proton and neutron densities as inputs
-- Reaction cross sections with user-provided density distributions
+- Reaction cross sections using matter densities and proton and neutron densities as inputs and a profile function
 - Automatic density generation based on rms matter radius and mass number
 - Built-in profile functions for Energies 40-1000 MeV
-The package is designed for experimental nuclear physicists, and those studying exotic nuclei and nuclear collisions.
+The package is designed for experimental nuclear physicists
 
 ## contributing, developing, and testing
 
