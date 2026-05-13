@@ -10,7 +10,7 @@ The release versions of the package are hosted at [INSERT]
 
 ## Tutorials
 
-Tutorials live in [Tutorials/ERICCa_Tutorial.ipynb]
+Tutorials live in /Tutorials/ERICCa_Tutorial.ipynb
 
 ## description
 

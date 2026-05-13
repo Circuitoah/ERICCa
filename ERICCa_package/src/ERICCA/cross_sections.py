@@ -223,7 +223,7 @@ class cross_section:
     def sigma_R_matter(self, rho_t,  rho_p , Gamma, Model = "OLA"):
 
         """
-        Calculates the reaction cross section for matter densities as inputs
+        Calculates the reaction cross section for matter densities as inputs in [mb]
     
         Input parameters
         rho_t : (list/array size = t_numpoints), target density [fm]
@@ -293,7 +293,7 @@ class cross_section:
                    Gamma_pn = lambda b : np.exp(-b), Gamma_nn = lambda b : np.exp(-b) , Model = "OLA"):
 
         """
-        Calculates the reaction cross section using proton and neutron densities as inputs 
+        Calculates the reaction cross section using proton and neutron densities as inputs in [mb]
     
         Input parameters
         rho_t_p : (list/array size = t_numpoints), target density [fm]
