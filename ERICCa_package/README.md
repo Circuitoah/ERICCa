@@ -44,7 +44,7 @@ The package is designed for experimental nuclear physicists
 ## citation
 ```latex
 @software{Smith_AJ_ERICCa_2026,
-author = {A. J. Smith, K. Godbey, C. Hebborn, F. M. Nunes},
+author = {A. J. Smith, K. Godbey, C. Hebborn},
 license = {?},
 month = May,
 title = {{ERICCa}},
