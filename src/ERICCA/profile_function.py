@@ -4,14 +4,14 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 
 
-class Profile_Function:
+class ProfileFunction:
     """
     Interpolates profile function parameters for a given reaction energy and
     evaluates Gamma(b). Results are reliable for E = 40–1000 MeV.
 
     Parameters
     ----------
-    Model_type : str
+    model_type : str
         Type of interaction. One of ``"general"``, ``"np"``, or ``"matter"``.
     E : float
         Reaction energy [MeV].
@@ -30,10 +30,10 @@ class Profile_Function:
         Proton-proton and proton-neutron profile functions (``"np"`` mode only).
     """
 
-    def __init__(self, Model_type="general", E=1):
-        if Model_type not in ("general", "np", "matter"):
+    def __init__(self, model_type: str = "general", E: float = 1):
+        if model_type not in ("general", "np", "matter"):
             raise ValueError(
-                f"Unknown Model_type '{Model_type}'. "
+                f"Unknown model_type '{model_type}'. "
                 "Choose 'general', 'np', or 'matter'."
             )
 
@@ -46,7 +46,7 @@ class Profile_Function:
             * self.sigma_n * np.exp(-b**2 / (2 * self.beta))
         )
 
-        if Model_type == "np":
+        if model_type == "np":
             pkg = importlib.resources.files("ERICCA")
             with importlib.resources.as_file(
                 pkg.joinpath("new_profile_funct_params.txt")
@@ -76,7 +76,7 @@ class Profile_Function:
                 * sigma_pn * np.exp(-b**2 / (2 * betapn))
             )
 
-        if Model_type == "matter":
+        if model_type == "matter":
             pkg = importlib.resources.files("ERICCA")
             with importlib.resources.as_file(
                 pkg.joinpath("profile_funct_param_matter.txt")

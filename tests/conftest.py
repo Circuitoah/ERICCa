@@ -7,12 +7,12 @@ dens_b_interpolator for all test nuclei is expensive (~10 s total).
 import numpy as np
 import pytest
 
-from ERICCA import Density, cross_section
+from ERICCA import CrossSection, Density
 
 
 @pytest.fixture(scope="session")
 def cs():
-    return cross_section()
+    return CrossSection()
 
 
 @pytest.fixture(scope="session")
@@ -33,14 +33,14 @@ def densities(cs):
     Ca_n = dens.rho_m(Ca_r_mesh)
 
     return {
-        "r_mesh":   r_mesh,
-        "C_p":      C_p,
-        "C_n":      C_n,
-        "C_rho_p":  cs.dens_b_interpolator(r_mesh, C_p),
-        "C_rho_n":  cs.dens_b_interpolator(r_mesh, C_n),
+        "r_mesh":    r_mesh,
+        "C_p":       C_p,
+        "C_n":       C_n,
+        "C_rho_p":   cs.dens_b_interpolator(r_mesh, C_p),
+        "C_rho_n":   cs.dens_b_interpolator(r_mesh, C_n),
         "Ca_r_mesh": Ca_r_mesh,
-        "Ca_p":     Ca_p,
-        "Ca_n":     Ca_n,
-        "Ca_rho_p": cs.dens_b_interpolator(Ca_r_mesh, Ca_p),
-        "Ca_rho_n": cs.dens_b_interpolator(Ca_r_mesh, Ca_n),
+        "Ca_p":      Ca_p,
+        "Ca_n":      Ca_n,
+        "Ca_rho_p":  cs.dens_b_interpolator(Ca_r_mesh, Ca_p),
+        "Ca_rho_n":  cs.dens_b_interpolator(Ca_r_mesh, Ca_n),
     }

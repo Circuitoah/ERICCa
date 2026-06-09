@@ -8,8 +8,8 @@ API and asserts they produce numerically identical results.  Tests marked
 import numpy as np
 import pytest
 
-import ERICCA.Baseline as Baseline
-from ERICCA import Density, Profile_Function, cross_section
+import ERICCA.baseline as Baseline
+from ERICCA import CrossSection, Density, ProfileFunction
 
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ def test_gamma_general():
     Baseline.beta    = 0.268
     Baseline.sigma_n = 3.16
 
-    pf = Profile_Function()
+    pf = ProfileFunction()
     pf.alpha   = 1.808
     pf.beta    = 0.268
     pf.sigma_n = 3.16
@@ -67,7 +67,7 @@ def test_gamma_general():
 def test_gamma_matter():
     E = 325
     Baseline.profile_funct_param(E, interaction_type="matter")
-    pf = Profile_Function(Model_type="matter", E=E)
+    pf = ProfileFunction(model_type="matter", E=E)
 
     assert np.isclose(Baseline.Gamma(3.0), pf.Gamma(3.0))
 
@@ -75,7 +75,7 @@ def test_gamma_matter():
 def test_gamma_np():
     E = 300
     Baseline.profile_funct_param(E, interaction_type="np")
-    pf = Profile_Function(Model_type="np", E=E)
+    pf = ProfileFunction(model_type="np", E=E)
 
     baseline_gamma = Baseline.Gamma(3.0)
     updated_gamma  = pf.Gamma_pp(3.0) + pf.Gamma_pn(3.0)
@@ -84,8 +84,8 @@ def test_gamma_np():
 
 
 def test_profile_function_invalid_model():
-    with pytest.raises(ValueError, match="Unknown Model_type"):
-        Profile_Function(Model_type="bad_model")
+    with pytest.raises(ValueError, match="Unknown model_type"):
+        ProfileFunction(model_type="bad_model")
 
 
 # ---------------------------------------------------------------------------
@@ -112,16 +112,16 @@ def test_dens_b_interpolator(cs):
 def matter_profile_300():
     E = 300
     Baseline.profile_funct_param(E, interaction_type="matter")
-    return Profile_Function(Model_type="matter", E=E)
+    return ProfileFunction(model_type="matter", E=E)
 
 
-def test_chi_mol_1(cs, densities, matter_profile_300):
+def test_chi_mol_half(cs, densities, matter_profile_300):
     b     = 3
     rho_t = densities["C_rho_p"] + densities["C_rho_n"]
     rho_p = densities["Ca_rho_p"] + densities["Ca_rho_n"]
 
     expected = Baseline.Chi_mol_1(b, rho_t, rho_p, Baseline.Gamma)
-    result   = cs.Chi_mol_1(b, rho_t, rho_p, matter_profile_300.Gamma)
+    result   = cs._chi_mol_half(b, rho_t, rho_p, matter_profile_300.Gamma)
 
     assert np.isclose(expected, result)
 
@@ -132,7 +132,7 @@ def test_chi_mol(cs, densities, matter_profile_300):
     rho_p = densities["Ca_rho_p"] + densities["Ca_rho_n"]
 
     expected = Baseline.Chi_mol(b, rho_t, rho_p, Baseline.Gamma)
-    result   = cs.Chi_mol(b, rho_t, rho_p, matter_profile_300.Gamma)
+    result   = cs.chi_mol(b, rho_t, rho_p, matter_profile_300.Gamma)
 
     assert np.isclose(expected, result)
 
@@ -196,7 +196,7 @@ def test_sigma_R_matter_ola(cs, densities, matter_profile_300):
 def np_profile_200():
     E = 200
     Baseline.profile_funct_param(E, interaction_type="np")
-    return Profile_Function(Model_type="np", E=E)
+    return ProfileFunction(model_type="np", E=E)
 
 
 def test_chi_mol_micro(cs, densities):
