@@ -10,9 +10,9 @@ class Density:
         rho_0_p : (float), the saturation density [fm^-3]
     """
     def __init__(self):
-     self.C_m_p = 0 
-     self.a_m_p = 0 
-     self.rho_0_p = 0
+        self.C_m_p = 0
+        self.a_m_p = 0
+        self.rho_0_p = 0
 
     def rho_m(self, r):
         """

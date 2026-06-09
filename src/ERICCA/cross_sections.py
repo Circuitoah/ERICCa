@@ -289,8 +289,11 @@ class cross_section:
         return (chi_pp + chi_pn + chi_nn)
 
 
-    def sigma_R_pn(self, rho_t_p, rho_t_n, rho_p_p = 0 , rho_p_n = 0, Gamma_pp = lambda b : np.exp(-b), 
-                   Gamma_pn = lambda b : np.exp(-b), Gamma_nn = lambda b : np.exp(-b) , Model = "OLA"):
+    def sigma_R_pn(self, rho_t_p, rho_t_n, rho_p_p=None, rho_p_n=None,
+                   Gamma_pp=lambda b: np.exp(-b),
+                   Gamma_pn=lambda b: np.exp(-b),
+                   Gamma_nn=lambda b: np.exp(-b),
+                   Model="OLA"):
 
         """
         Calculates the reaction cross section using proton and neutron densities as inputs in [mb]
@@ -307,10 +310,15 @@ class cross_section:
 
         uses b mesh
         """
-        
+        if Model in ("MOL", "OLA") and (rho_p_p is None or rho_p_n is None):
+            raise ValueError(
+                f"Model='{Model}' requires rho_p_p and rho_p_n. "
+                "Use Model='OLA p-n' for proton-nucleus scattering."
+            )
+
         if (Model == "MOL"):
             sigma_R_int= lambda b: 2 * np.pi * b * (1 - np.exp(- 2 * self.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, Gamma_pp, Gamma_pn, Gamma_nn).imag ) )
-         
+
         elif (Model == "OLA p-n"):
         #if only the target/projectile are composite particles
             sigma_R_int =lambda b: 2 * np.pi * b * (1 - np.exp(- 2 * self.chi_no_dens( b , rho_t_p, rho_t_n, Gamma_pp, Gamma_pn).imag ) )
