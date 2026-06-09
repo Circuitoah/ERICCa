@@ -223,16 +223,18 @@ class cross_section:
     def sigma_R_matter(self, rho_t,  rho_p , Gamma, Model = "OLA"):
 
         """
-        Calculates the reaction cross section for matter densities as inputs in [mb]
-    
-        Input parameters
-        rho_t : (list/array size = t_numpoints), target density [fm]
-        rho_p : (list/array size = t_numpoints), projectile density [fm]
-        Gamma : (function(b)), profile function [1/fm^2]
-        Model : (string),  indicates what model should be used in the calculation
-                        -> "MOL","OLA","OLA p-n"
+        Calculates the reaction cross section for matter densities [mb].
 
-        uses b mesh
+        Parameters
+        ----------
+        rho_t : array
+            Target density on the t mesh [fm^-3].
+        rho_p : array
+            Projectile density on the s mesh [fm^-3].
+        Gamma : callable
+            Profile function Gamma(b) [fm^-2].
+        Model : str
+            Calculation model: ``"OLA"`` (default) or ``"MOL"``.
         """
         
         if (Model == "MOL"):

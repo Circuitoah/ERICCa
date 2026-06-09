@@ -16,9 +16,12 @@ class Density:
 
     def rho_m(self, r):
         """
-        Calculates the density of a two point fermi funciton at r radius
-        Input paramters
-            r       : (float), radius in spherical coordinates [fm]
+        Calculates the density of a two-point Fermi function at radius r.
+
+        Parameters
+        ----------
+        r : float or array
+            Radius in spherical coordinates [fm].
         """
         return self.rho_0_p /(1 + np.exp((r - self.C_m_p)/self.a_m_p))
     
