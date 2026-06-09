@@ -73,4 +73,4 @@ dmypy.json
 
 # Documentation builds
 docs/_build/
-site/
+site/src/ERICCA/__version__.py
