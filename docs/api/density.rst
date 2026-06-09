@@ -1,6 +1,6 @@
 Density
 =======
 
-.. automodule:: ERICCA.Density
+.. automodule:: ERICCA.density
    :members:
    :undoc-members: False

@@ -18,7 +18,7 @@ Quick start
 .. code-block:: python
 
    import numpy as np
-   from ERICCA import cross_section, Density, Profile_Function
+   from ERICCA import CrossSection, Density, ProfileFunction
 
    # Build nuclear densities (two-point Fermi fit)
    dens = Density()
@@ -27,10 +27,10 @@ Quick start
    rho = dens.rho_m(r)
 
    # Profile function from tabulated NN parameters at E=325 MeV
-   pf = Profile_Function(Model_type="matter", E=325)
+   pf = ProfileFunction(model_type="matter", E=325)
 
    # Calculate reaction cross section
-   cs = cross_section()
+   cs = CrossSection()
    rho_b = cs.dens_b_interpolator(r, rho)
    sigma = cs.sigma_R_matter(rho_b, rho_b, pf.Gamma, Model="OLA")
    print(f"sigma_R = {sigma:.1f} mb")

@@ -1,6 +1,6 @@
-Profile\_Function
-=================
+ProfileFunction
+===============
 
-.. automodule:: ERICCA.Profile_function
+.. automodule:: ERICCA.profile_function
    :members:
    :undoc-members: False

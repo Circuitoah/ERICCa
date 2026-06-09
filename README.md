@@ -15,10 +15,10 @@ The release versions of the package are hosted at [INSERT]
 
 ## Tutorials
 
-Tutorials live in /Tutorials/ERICCa_Tutorial.ipynb
+Tutorials live in `/tutorials/`.
 
-For the full tutorial use /Tutorials/ERICCa_Tutorial.ipynb
-If Tutorials is too long use /Tutorials/ERICCa_TLDR.ipynb
+For the full tutorial use `tutorials/ERICCa_Tutorial.ipynb`.
+For a condensed version use `tutorials/ERICCa_TLDR.ipynb`.
 
 ## description
 
