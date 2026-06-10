@@ -364,9 +364,11 @@ class CrossSection:
             Density values at each radius [fm^-3]. Must be same length as array_r.
         """
 
+        rbf = Rbf(array_r, array_rho)
+
         def rho_funct(r):
             if r <= array_r[-1]:
-                return Rbf(array_r, array_rho)(r)
+                return rbf(r)
             return 0
 
         def rho_z_funct(b):
