@@ -1,15 +1,13 @@
 """
-the difference between this and the other version of Functions.py Gamma is an input to the X and sigma 
+Reference implementation of ERICCa in procedural style.
 
-Edit: Febuary 2nd, 2026.  Commenting the code in prep for publications if the code stops giving proper results please go to \Final_Results_with_Figures
-
-Edit:Febuary 3rd, 2026. Found a bug in the code, bmax was set to rmax. This means our calculatations were off by ~5 mb. BUG HAS BEEN FIXED. Please use this version of the code.
-
-Edit: March 23rd, 2026. Found a bug in chi_no_dens. The input file was  chi_no_dens(b , rho, Gammap) instead of  chi_no_dens(b , rho, Gamma). This apear during 5_14_25 update when Gamma was added as an input. This therefore post-dates the benchmarked that  chi_no_dens was used in. 
-
-Edit: April 9th, 2026.  I found a bug in my code, in chi_mol_micro the rho_n_p and rho_p_n switched places in the function. THIS BUG HAS BEEN FIXED. Pleas euse this version of the code.
+This module exists for validation purposes. The production API is in
+cross_sections.py, Density.py, and Profile_function.py. Do not use this
+module directly in user code.
 """
 
+
+import importlib.resources
 
 import numpy as np
 from numpy.polynomial import legendre
@@ -246,8 +244,11 @@ def profile_funct_param(E, interaction_type = "matter"):
     
     
     if (interaction_type == "np"):# and ( E < 1000 and E > 40) :
-    
-        profile_funct_table = np.genfromtxt("new_profile_funct_params.txt", unpack = True, skip_header= 2)
+
+        with importlib.resources.as_file(
+            importlib.resources.files("ERICCA").joinpath("new_profile_funct_params.txt")
+        ) as path:
+            profile_funct_table = np.genfromtxt(path, unpack=True, skip_header=2)
     
 
         sigma_pp_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
@@ -270,8 +271,11 @@ def profile_funct_param(E, interaction_type = "matter"):
         return 
 
     elif (interaction_type == "matter"):# and ( E < 1000 and E > 40) :
-    
-        profile_funct_table = np.genfromtxt("profile_funct_param_matter.txt", unpack = True, skip_header= 2)
+
+        with importlib.resources.as_file(
+            importlib.resources.files("ERICCA").joinpath("profile_funct_param_matter.txt")
+        ) as path:
+            profile_funct_table = np.genfromtxt(path, unpack=True, skip_header=2)
     
 
         sigma_NN_fun = CubicSpline(profile_funct_table[0],profile_funct_table[1])
@@ -285,41 +289,11 @@ def profile_funct_param(E, interaction_type = "matter"):
         mGamma = lambda b : ((1 -  1j * alpha)/( 4 * np.pi * beta) ) * sigma_n * np.exp( - b**2/(2 *beta) ) 
         Gamma = lambda b: mGamma(b)
         return 
-    
-    
-    elif interaction_type == "matter_input":
-        print("please input the following the values")
-        take_alpha = input (" funct.alpha =")
-        take_beta = input ("funct.beta =")
-        take_sigma_n = input ("funct.sigma_n =")
-    
-  
-        alpha = take_alpha
-        beta = take_beta
-        sigma_n = take_sigma_n
-        
-        def mGamma(b):
-            # calculating the profile function 
-   
-            global alpha, beta, sigma_n
-
-            # alpha  :   real and imaginary part of the scattering NN scattering amplitude
-            # beta   :   finite range parameter
-            # sigma_N:   does not need to be calculated 
-
-            arg1 = (1 -  1j * alpha)/( 4 * np.pi * beta)
-            arg2 = sigma_n * np.exp( - b**2/(2 *beta) ) 
-
-            #arg1 = (1 -  1j * alpha)/(4 * np.pi)
-            #arg2 = (sigma_n)* np.exp( - (beta * b**2)/2 )
-    
-            return arg1 * arg2 
-        Gamma = mGamma
-        return 
-        
-    else :
-        print("Something didn't work :-( , check to make sure your inputs are valid")
-        return
+    else:
+        raise ValueError(
+            f"Unknown interaction_type '{interaction_type}'. "
+            "Choose 'np' or 'matter'."
+        )
 
     
     
