@@ -7,11 +7,11 @@
 
 A reaction code that calculates nucleus-nucleus reaction cross section in the eikonal framework using nuclear densities as inputs.
 
-## quick start
+## Quick start
 ```
  pip install ERICCa
 ```
-The release versions of the package are hosted at [INSERT]
+The release versions of the package are hosted at https://github.com/Circuitoah/ERICCa
 
 ## Tutorials
 
@@ -20,7 +20,7 @@ Tutorials live in `/tutorials/`.
 For the full tutorial use `tutorials/ERICCa_Tutorial.ipynb`.
 For a condensed version use `tutorials/ERICCa_TLDR.ipynb`.
 
-## description
+## Description
 
 **ERICCa** (Eikonal Reaction, density Input, Cross section Calculator) is a Python package for calculating nucleus-nucleus reaction cross sections within the eikonal approximation framework. The code provides a flexible and robust approach to computing reaction observables by taking nuclear density distributions as direct inputs, allowing for accurate modeling of a wide range of nuclear reactions.
 
@@ -45,11 +45,11 @@ The package is designed for experimental nuclear physicists
 ```latex
 @software{Smith_AJ_ERICCa_2026,
 author = {A. J. Smith, K. Godbey, C. Hebborn},
-license = {?},
-month = May,
+license = {MIT},
+month = July,
 title = {{ERICCa}},
-url = {?},
-version = {1.0.0},
+url = {https://github.com/Circuitoah/ERICCa},
+version = {v0.1.0},
 year = {2026}
 }
 ```
