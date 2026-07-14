@@ -5,12 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ERICCa"
 authors = [
-  {name="Andrew John Smith", email="smithan@frib.msu.edu"}
+  {name="Andrew John Smith", email="smithan@frib.msu.edu"},
+  {name="Kyle Godbey"}
 ]
 description = "A nuclear reaction code that calculates nucleus-nucleus reaction cross section in the eikonal framework"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dynamic = ["dependencies", "version"]
 classifiers = [
     "Programming Language :: Python :: 3",
