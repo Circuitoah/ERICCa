@@ -48,9 +48,9 @@ TBD
 author = {A. J. Smith, K. Godbey, C. Hebborn},
 license = {MIT},
 month = July,
-title = {{ERICCa}},
+title = {ERICCa},
 url = {https://github.com/Circuitoah/ERICCa},
-version = {v0.1.0},
+version = {v0.1.1},
 year = {2026}
 }
 ```
