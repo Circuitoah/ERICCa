@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ERICCa"
 authors = [
-  {name="Kyle Godbey"}
-  {name="Andrew John Smith", email="smithan@frib.msu.edu"},
+  {name="Kyle Godbey"},
+  {name="Andrew John Smith", email="smithan@frib.msu.edu"}
 ]
 description = "A nuclear reaction code that calculates nucleus-nucleus reaction cross section in the eikonal framework"
 readme = "README.md"
