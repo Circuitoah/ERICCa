@@ -42,7 +42,7 @@ ERICCa can calculate:
 
 TBD
 
-## citation
+## Citation
 ```latex
 @software{Smith_AJ_ERICCa_2026,
 author = {A. J. Smith, K. Godbey, C. Hebborn},
