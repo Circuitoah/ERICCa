@@ -9,7 +9,7 @@ A reaction code that calculates nucleus-nucleus reaction cross sections in the e
 
 ## Quick start
 ```
- pip install ERICCA
+ pip install ERICCa
 ```
 The release versions of the package are hosted at https://github.com/Circuitoah/ERICCa
 
