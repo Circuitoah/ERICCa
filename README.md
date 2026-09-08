@@ -17,18 +17,21 @@ The release versions of the package are hosted at https://github.com/Circuitoah/
 
 Tutorials live in `/tutorials/`.
 
-For the full tutorial use `tutorials/ERICCa_Tutorial.ipynb`.
-For a condensed version use `tutorials/ERICCa_TLDR.ipynb`.
+To calculate cross sections using matter densities as inputs, use `tutorials/Reaction_Cross_Section_From_Matter_Density.ipynb`.
+To calculate cross sections using proton and neutron densities as inputs use 'tutorials/Reaction_Cross_Section_From_Proton_And_Neutron_Density.ipynb'.
+
+For an in-depth tutorial showing ERICCa's more advanced features. use `tutorials/ERICCa_Tutorial.ipynb`.
+For a condensed version, use `tutorials/ERICCa_TLDR.ipynb`.
 
 ## Description
 
-**ERICCa** (Eikonal Reaction, density Input, Cross section Calculator) is a Python package for calculating nucleus-nucleus reaction cross sections within the eikonal approximation framework. The code provides a flexible and robust approach to computing reaction observables by taking nuclear density distributions as direct inputs, allowing for accurate modeling of a wide range of nuclear reactions.
+**ERICCa** (Eikonal Reaction, density Input, Cross section Calculator) is a Python package for calculating nucleus-nucleus reaction cross sections within the eikonal approximation framework. The code provides a flexible and robust approach to computing reaction observables by taking nuclear density distributions as inputs, allowing for accurate modeling of a wide range of nuclear reactions.
 
 ### Key Features
 
-- **Eikonal Framework**: Employs the two-body eikonal framework for fast computation of reaction cross sections
+- **Eikonal Framework**: Uses the two-body eikonal framework for fast computation of reaction cross sections
 - **Density-Based Approach**: Nuclear density distributions (matter or proton and neutron densities) as inputs
-- **Accurate Integration**: Implements multi-dimensional numerical integration with adaptive mesh configurations
+- **Accurate Integration**: Implements multi-dimensional numerical integration with adaptive mesh
 - **Validated Results**: Benchmarked against experimental reaction data
 
 ### Capabilities
@@ -40,7 +43,8 @@ ERICCa can calculate:
 
 ## Contributing, Developing, and Testing
 
-TBD
+Thank you to my alpha testers at FRIB: **Patrick McGlynn, Daniela Ramirez-Chavez** and **Shane Watters**
+Thank you to my beta testers in the **Few Body Reactions Group!**
 
 ## Citation
 ```latex
