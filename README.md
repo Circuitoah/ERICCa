@@ -43,7 +43,7 @@ ERICCa can calculate:
 
 ## Contributing, Developing, and Testing
 
-Thank you to my alpha testers at FRIB: **Patrick McGlynn, Daniela Ramirez-Chavez** and **Shane Watters**
+Thank you to my alpha testers at FRIB: **Patrick McGlynn, Daniela Ramirez-Chavez** and **Shane Watters**.
 Thank you to my beta testers in the **Few Body Reactions Group!**
 
 ## Citation
