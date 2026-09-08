@@ -132,9 +132,9 @@ class CrossSection:
         b : float
             Impact parameter [fm].
         rho_t : np.ndarray
-            Target density on the t mesh [fm^-3].
+            Target density on the t mesh [fm^-2].
         rho_p : np.ndarray
-            Projectile density on the s mesh [fm^-3].
+            Projectile density on the s mesh [fm^-2].
         Gamma : callable
             Profile function Gamma(b) [fm^-2].
         """
@@ -155,9 +155,9 @@ class CrossSection:
         b : float
             Impact parameter [fm].
         rho_t : np.ndarray
-            Target density on the t mesh [fm^-3].
+            Target density on the t mesh [fm^-2].
         rho_p : np.ndarray
-            Projectile density on the s mesh [fm^-3].
+            Projectile density on the s mesh [fm^-2].
         Gamma : callable
             Profile function Gamma(b) [fm^-2].
         """
@@ -233,9 +233,9 @@ class CrossSection:
         b : float
             Impact parameter [fm].
         rho_t_p, rho_t_n : np.ndarray
-            Target proton and neutron densities on the t mesh [fm^-3].
+            Target proton and neutron densities on the t mesh [fm^-2].
         rho_p_p, rho_p_n : np.ndarray
-            Projectile proton and neutron densities on the s mesh [fm^-3].
+            Projectile proton and neutron densities on the s mesh [fm^-2].
         Gamma_pp, Gamma_pn, Gamma_nn : callable
             pp, pn, and nn profile functions [fm^-2].
         """
@@ -259,9 +259,9 @@ class CrossSection:
         b : float
             Impact parameter [fm].
         rho_t_p, rho_t_n : np.ndarray
-            Target proton and neutron densities on the t mesh [fm^-3].
+            Target proton and neutron densities on the t mesh [fm^-2].
         rho_p_p, rho_p_n : np.ndarray
-            Projectile proton and neutron densities on the s mesh [fm^-3].
+            Projectile proton and neutron densities on the s mesh [fm^-2].
         Gamma_pp, Gamma_pn, Gamma_nn : callable
             pp, pn, and nn profile functions [fm^-2].
         """
@@ -285,9 +285,9 @@ class CrossSection:
         Parameters
         ----------
         rho_t : np.ndarray
-            Target density on the t mesh [fm^-3].
+            Target density on the t mesh [fm^-2].
         rho_p : np.ndarray
-            Projectile density on the s mesh [fm^-3].
+            Projectile density on the s mesh [fm^-2].
         Gamma : callable
             Profile function Gamma(b) [fm^-2].
         Model : str
@@ -318,7 +318,7 @@ class CrossSection:
         Parameters
         ----------
         rho_t_p, rho_t_n : np.ndarray
-            Target proton and neutron densities on the t mesh [fm^-3].
+            Target proton and neutron densities on the t mesh [fm^-2].
         rho_p_p, rho_p_n : np.ndarray, optional
             Projectile proton and neutron densities (required for ``"OLA"`` and
             ``"MOL"``; not used for ``"OLA p-n"``).
