@@ -178,7 +178,7 @@ class CrossSection:
         func_values = chi_s(b, self.s_theta_mapped_roots)
         return np.sum(self.s_theta_weights * func_values, axis=0)
 
-    def chi_no_dens_term(
+    def chi_nN_matter(
         self,
         b: float,
         rho: np.ndarray,
@@ -205,7 +205,7 @@ class CrossSection:
         func_values = chi_s(b, self.s_theta_mapped_roots)
         return np.sum(self.s_theta_weights * func_values, axis=0)
 
-    def chi_no_dens(
+    def chi_nN_pn(
         self,
         b: float,
         rho_p: np.ndarray,
@@ -214,7 +214,7 @@ class CrossSection:
         Gamma_pn: Callable,
     ) -> complex:
         """OLA eikonal phase for proton-nucleus scattering with p/n separation."""
-        return self.chi_no_dens_term(b, rho_p, Gamma_pp) + self.chi_no_dens_term(b, rho_n, Gamma_pn)
+        return self.chi_nN_matter(b, rho_p, Gamma_pp) + self.chi_nN_matter(b, rho_n, Gamma_pn)
 
     # --- Composite eikonal phases (p/n decomposition) ------------------------
 
@@ -336,7 +336,7 @@ class CrossSection:
         if Model == "MOL":
             sigma_R_int = lambda b: 2 * np.pi * b * (1 - np.exp(-2 * self.chi_mol_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, Gamma_pp, Gamma_pn, Gamma_nn).imag))
         elif Model == "OLA p-n":
-            sigma_R_int = lambda b: 2 * np.pi * b * (1 - np.exp(-2 * self.chi_no_dens(b, rho_t_p, rho_t_n, Gamma_pp, Gamma_pn).imag))
+            sigma_R_int = lambda b: 2 * np.pi * b * (1 - np.exp(-2 * self.chi_nN_pn(b, rho_t_p, rho_t_n, Gamma_pp, Gamma_pn).imag))
         else:
             sigma_R_int = lambda b: 2 * np.pi * b * (1 - np.exp(-2 * self.chi_ola_micro(b, rho_t_p, rho_t_n, rho_p_p, rho_p_n, Gamma_pp, Gamma_pn, Gamma_nn).imag))
 

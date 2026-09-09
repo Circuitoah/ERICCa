@@ -148,12 +148,12 @@ def test_chi_ola(cs, densities, matter_profile_300):
     assert np.isclose(expected, result)
 
 
-def test_chi_no_dens(cs, densities, matter_profile_300):
+def test_chi_nN_pn(cs, densities, matter_profile_300):
     b       = 3
     rho_sum = densities["C_rho_p"] + densities["C_rho_p"]
 
     expected = Baseline.chi_no_dens(b, rho_sum, Baseline.Gamma)
-    result   = cs.chi_no_dens(
+    result   = cs.chi_nN_p(
         b,
         densities["C_rho_p"], densities["C_rho_p"],
         Baseline.Gamma, Baseline.Gamma,
