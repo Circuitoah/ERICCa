@@ -80,7 +80,7 @@ license = {MIT},
 month = July,
 title = {ERICCa},
 url = {https://github.com/Circuitoah/ERICCa},
-version = {v0.1.2},
+version = {v0.1.5},
 year = {2026}
 }
 ```
