@@ -23,6 +23,32 @@ To calculate cross sections using proton and neutron densities as inputs use 'tu
 For an in-depth tutorial showing ERICCa's more advanced features. use `tutorials/ERICCa_Tutorial.ipynb`.
 For a condensed version, use `tutorials/ERICCa_TLDR.ipynb`.
 
+Tutorials can be downloaded from the GitHub page: https://github.com/Circuitoah/ERICCa/tree/main/tutorials
+
+or be locally installed via 
+
+venv and pip:
+```
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[tutorials]"
+jupyter lab
+```
+
+conda/mamba:
+```
+mamba create -n ericca python=3.12 pip
+mamba activate ericca
+python -m pip install -e ".[tutorials]"
+jupyter lab
+```
+
+and uv:
+```
+uv sync --extra tutorials
+uv run jupyter lab
+```
+
 ## Description
 
 **ERICCa** (Eikonal Reaction, density Input, Cross section Calculator) is a Python package for calculating nucleus-nucleus reaction cross sections within the eikonal approximation framework. The code provides a flexible and robust approach to computing reaction observables by taking nuclear density distributions as inputs, allowing for accurate modeling of a wide range of nuclear reactions.
