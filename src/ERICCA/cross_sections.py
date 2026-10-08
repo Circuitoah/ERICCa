@@ -307,9 +307,9 @@ class CrossSection:
         rho_t_n: np.ndarray,
         rho_p_p: Optional[np.ndarray] = None,
         rho_p_n: Optional[np.ndarray] = None,
-        Gamma_pp: Callable = lambda b: np.exp(-b),
-        Gamma_pn: Callable = lambda b: np.exp(-b),
-        Gamma_nn: Callable = lambda b: np.exp(-b),
+        Gamma_pp: Callable,
+        Gamma_pn: Callable,
+        Gamma_nn: Callable = lambda b: np.exp(-b**2),
         Model: str = "OLA",
     ) -> float:
         """
