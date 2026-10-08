@@ -1,3 +1,4 @@
+#From Table 1 of https://journals.aps.org/prc/pdf/10.1103/PhysRevC.77.034607
 E	sigma_pp	a_pp	beta_pp		sigma_pn	a_pn	beta_pn
 (MeV)	(fm^2)			(fm^2)		(fm^2)			(fm^2)
 40	7.0 		1.328 	0.385 		21.8 		0.493 	0.539

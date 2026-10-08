@@ -49,9 +49,9 @@ class ProfileFunction:
         if model_type == "np":
             pkg = importlib.resources.files("ERICCA")
             with importlib.resources.as_file(
-                pkg.joinpath("new_profile_funct_params.txt")
+                pkg.joinpath("profile_funct_pn_Abu-Ibrahim_PRC.77.034607.txt")
             ) as path:
-                table = np.genfromtxt(path, unpack=True, skip_header=2)
+                table = np.genfromtxt(path, unpack=True, skip_header=3)
 
             sigma_pp_fun = CubicSpline(table[0], table[1])
             alphapp_fun  = CubicSpline(table[0], table[2])
@@ -79,7 +79,7 @@ class ProfileFunction:
         if model_type == "matter":
             pkg = importlib.resources.files("ERICCA")
             with importlib.resources.as_file(
-                pkg.joinpath("profile_funct_param_matter.txt")
+                pkg.joinpath("profile_funct_matter_Horiuchi_PRC.75.044607.txt")
             ) as path:
                 table = np.genfromtxt(path, unpack=True, skip_header=2)
 

@@ -1,4 +1,4 @@
-#PhysRevC.75.044607
+# W. Horiuchi PhysRevC.75.044607
 #E(A MeV)     σ_tot_NN(fm2)    α        β(fm2)
 30.           19.6             0.87     0.685
 38.           14.6             0.89     0.521
