@@ -210,11 +210,11 @@ class CrossSection:
         b: float,
         rho_p: np.ndarray,
         rho_n: np.ndarray,
-        Gamma_pp: Callable,
-        Gamma_pn: Callable,
+        Gamma_nucleon_p: Callable,
+        Gamma_nucleon_n: Callable,
     ) -> complex:
         """OLA eikonal phase for proton-nucleus scattering with p/n separation."""
-        return self.chi_nN_matter(b, rho_p, Gamma_pp) + self.chi_nN_matter(b, rho_n, Gamma_pn)
+        return self.chi_nN_matter(b, rho_p, Gamma_nucleon_p) + self.chi_nN_matter(b, rho_n, Gamma_nucleon_n)
 
     # --- Composite eikonal phases (p/n decomposition) ------------------------
 
