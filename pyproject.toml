@@ -46,7 +46,7 @@ ERICCA = ["*.txt"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools_scm]
-write_to = "src/__version__.py"
+write_to = "src/ERICCA/__version__.py"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
