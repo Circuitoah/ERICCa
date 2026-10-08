@@ -18,9 +18,8 @@ The release versions of the package are hosted at https://github.com/Circuitoah/
 Tutorials live in `/tutorials/`.
 
 To calculate cross sections using matter densities as inputs, use `tutorials/Reaction_Cross_Section_From_Matter_Density.ipynb`.
-To calculate cross sections using proton and neutron densities as inputs, use 'tutorials/Reaction_Cross_Section_From_Proton_And_Neutron_Density.ipynb'.
+To calculate cross sections using proton and neutron densities as inputs, use `tutorials/Reaction_Cross_Section_From_Proton_And_Neutron_Density.ipynb`.
 
-For an in-depth tutorial showing ERICCa's more advanced features. use `tutorials/ERICCa_Tutorial.ipynb`.
 For a condensed version, use `tutorials/ERICCa_TLDR.ipynb`.
 
 Tutorials can be downloaded from the GitHub page: https://github.com/Circuitoah/ERICCa/tree/main/tutorials
@@ -69,8 +68,8 @@ ERICCa can calculate:
 
 ## Contributing, Developing, and Testing
 
-Thank you to my alpha testers at FRIB: **Patrick McGlynn, Daniela Ramirez-Chavez** and **Shane Watters**.
-Thank you to my beta testers in the **Few Body Reactions Group at MSU**:  Ibrahim Abdurraman, Daniel Barr, Kyle Beyer, Manuel Catacora-Rios, Pablo Giuliani, Callen Hickman,  Grigor Sargsyan,  Zetian Ma, Filomena Nunes, Daniel Shiu, 
+Thank you to my alpha testers at **FRIB**: Patrick McGlynn, Daniela Ramirez-Chavez and Shane Watters.
+Thank you to my beta testers in the **Few Body Reactions Group at FRIB/MSU**:  Ibrahim Abdurraman, Daniel Barr, Kyle Beyer, Manuel Catacora-Rios, Pablo Giuliani, Callen Hickman,  Grigor Sargsyan,  Zetian Ma, Filomena Nunes, and Daniel Shiu
 
 ## Citation
 ```latex
